@@ -3,7 +3,7 @@ import Navbar from "../../shared/Navbar/Navbar";
 
 const MainPage = () => {
     return (
-        <div>
+        <div className="roboto">
             <Navbar/>
             <Outlet/>
         </div>
