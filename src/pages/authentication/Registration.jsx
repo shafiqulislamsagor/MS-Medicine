@@ -3,13 +3,30 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import Buttons from "../../components/Button/Buttons";
 import {  MenuItem, Select } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import useImageUpload from "../../hooks/uploadImage/useImage";
+import { FaRegUserCircle } from "react-icons/fa";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+
+
+// import { useState } from "react";
 
 const Registration = () => {
-  const [role, setrole] = useState("");
+const {uploadedImageUrl, uploadImage} = useImageUpload()
 
-  const handleChange = (event) => {
-    setrole(event.target.value);
+  const handleChange = async(event) => {
+    event.preventDefault()
+    // setrole();
+    const username = event.target.username.value
+    const email = event.target.email.value
+    const userRole = event.target.Userrole.value
+    const image = event.target.image.files[0]
+    await uploadImage(image)
+    const uploadImaged = uploadedImageUrl
+    const password = event.target.password.value
+    const userInfo = {username , password, userRole , uploadImaged ,email}
+    
+    console.log("🚀 ~ handleChange ~ userInfo:", userInfo)
   };
   return (
     <>
@@ -35,11 +52,12 @@ const Registration = () => {
                   </label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                      <MdOutlineMailOutline className="w-4 h-4 text-gray-500" />
+                      <FaRegUserCircle className="w-4 h-4 text-gray-500" />
                     </span>
                     <input
                       type="text"
                       id="user"
+                      name="username"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                       placeholder="Enter Your name"
                       required
@@ -59,6 +77,7 @@ const Registration = () => {
                       <MdOutlineMailOutline className="w-4 h-4 text-gray-500" />
                     </span>
                     <input
+                    name="email"
                       type="email"
                       id="email"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
@@ -79,17 +98,18 @@ const Registration = () => {
                   </label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                      <RiLockPasswordLine className="w-4 h-4 text-gray-500" />
+                      <MdOutlineAdminPanelSettings className="w-4 h-4 text-gray-500" />
                     </span>
 
                     <Select
                       labelId="demo-simple-select-helper-label"
                       id="demo-simple-select-helper"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-0"
-                      value={role}
+                    //   value={role}
                       label="role"
-                      onChange={handleChange}
                       required
+                      defaultValue={'user'}
+                      name="Userrole"
                     >
                       <MenuItem value={"user"}>User</MenuItem>
                       <MenuItem value={"seller"}>Seller</MenuItem>
@@ -107,12 +127,13 @@ const Registration = () => {
                   </label>
                   <div className="flex">
                   <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                      <RiLockPasswordLine className="w-4 h-4 text-gray-500" />
+                      <MdOutlineAddPhotoAlternate className="w-4 h-4 text-gray-500" />
                     </span>
                   <input
                     className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                     id="file_input"
                     type="file"
+                    name="image"
                   />
                   </div>
                 </div>
@@ -134,6 +155,7 @@ const Registration = () => {
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                       placeholder="••••••••"
                       required
+                      name="password"
                     />
                   </div>
                 </div>
