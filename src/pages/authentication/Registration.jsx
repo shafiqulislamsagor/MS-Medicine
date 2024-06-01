@@ -2,17 +2,23 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import Buttons from "../../components/Button/Buttons";
 import {  MenuItem, Select } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useImageUpload from "../../hooks/uploadImage/useImage";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import useAuth from "../../hooks/Auth/useAuth";
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 
 
 // import { useState } from "react";
+import { toast } from 'react-toastify';
 
 const Registration = () => {
-const {uploadedImageUrl, uploadImage} = useImageUpload()
+  const axiosPublic = useAxiosSecure()
+  const navigate = useNavigate()
+const { uploadImage} = useImageUpload()
+const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
 
   const registrationHandle = async(event) => {
     event.preventDefault()
@@ -21,12 +27,43 @@ const {uploadedImageUrl, uploadImage} = useImageUpload()
     const email = event.target.email.value
     const userRole = event.target.Userrole.value
     const image = event.target.image.files[0]
-    await uploadImage(image)
-    const uploadImaged = uploadedImageUrl
+    console.log(user)
     const password = event.target.password.value
-    const userInfo = {username , password, userRole , uploadImaged ,email}
+    const img = await uploadImage(image);
+    console.log(img)
+
+      const userInfo = { username, password, userRole, img, email };
+      console.log('🚀 ~ registrationHandle ~ userInfo:', userInfo);
+
     
-    console.log("🚀 ~ registrationHandle ~ userInfo:", userInfo)
+      try{
+        await UserCreate(email,password)
+      .then(()=>{
+        UserUpdate(username,img)
+        .then(async(current)=>{
+          console.log(current)
+          await axiosPublic.post('/users',userInfo)
+          .then(()=>{
+            setLoading(true)
+            UserLogout()
+            toast.success('New Account Created Successfully ..!!!')
+            navigate('/join-us')
+          }).catch(()=>{
+            console.log('Something went wrong')
+          })
+        })
+       
+      })
+      .catch(()=>{
+    toast.error('Already Email used for creating...!!!')
+      })
+      }
+      catch(error){
+        console.log(error)
+      }
+    
+    
+    
   };
   return (
     <>
