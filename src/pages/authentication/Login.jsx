@@ -5,6 +5,16 @@ import { Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const loginHandler = event => {
+    event.preventDefault();
+    const email = event.target.email.value 
+    const password = event.target.password.value 
+    const confirmpassword = event.target.confirm.value
+
+    const loginInfo = {email , password, confirmpassword}
+    
+    console.log("🚀 ~ loginHandler ~ const:", loginInfo)
+  }
   return (
     <>
       <div className="pt-10 w-2/4 mx-auto">
@@ -19,7 +29,7 @@ const Login = () => {
               <p className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Log-In your account
               </p>
-              <form className="space-y-4 md:space-y-6">
+              <form onSubmit={loginHandler} className="space-y-4 md:space-y-6">
                 {/* Email */}
                 <div>
                   <label
@@ -35,6 +45,7 @@ const Login = () => {
                     <input
                       type="email"
                       id="email"
+                      name="email"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                       placeholder="Your Email Address"
                       required
@@ -57,6 +68,7 @@ const Login = () => {
                     <input
                       type="password"
                       id="password"
+                      name="password"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                       placeholder="••••••••"
                       required
@@ -82,6 +94,7 @@ const Login = () => {
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
                       placeholder="••••••••"
                       required
+                      name="confirm"
                     />
                   </div>
                 </div>

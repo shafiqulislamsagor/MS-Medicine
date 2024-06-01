@@ -14,7 +14,7 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 const Registration = () => {
 const {uploadedImageUrl, uploadImage} = useImageUpload()
 
-  const handleChange = async(event) => {
+  const registrationHandle = async(event) => {
     event.preventDefault()
     // setrole();
     const username = event.target.username.value
@@ -26,7 +26,7 @@ const {uploadedImageUrl, uploadImage} = useImageUpload()
     const password = event.target.password.value
     const userInfo = {username , password, userRole , uploadImaged ,email}
     
-    console.log("🚀 ~ handleChange ~ userInfo:", userInfo)
+    console.log("🚀 ~ registrationHandle ~ userInfo:", userInfo)
   };
   return (
     <>
@@ -42,7 +42,7 @@ const {uploadedImageUrl, uploadImage} = useImageUpload()
               <p className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Create an new account
               </p>
-              <form onSubmit={handleChange} className="space-y-4 md:space-y-6">
+              <form onSubmit={registrationHandle} className="space-y-4 md:space-y-6">
                 <div>
                   <label
                     htmlFor="user"
