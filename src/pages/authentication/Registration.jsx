@@ -32,7 +32,7 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
     const img = await uploadImage(image);
     console.log(img)
 
-      const userInfo = { username, password, userRole, img, email };
+      const userInfo = { username, password, userRole, img, email , status:'normal'};
       console.log('🚀 ~ registrationHandle ~ userInfo:', userInfo);
 
     
@@ -48,6 +48,7 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
             UserLogout()
             toast.success('New Account Created Successfully ..!!!')
             navigate('/join-us')
+            event.target.reset()
           }).catch(()=>{
             console.log('Something went wrong')
           })
@@ -56,6 +57,7 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
       })
       .catch(()=>{
     toast.error('Already Email used for creating...!!!')
+    event.target.reset()
       })
       }
       catch(error){
@@ -227,7 +229,7 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
                 {/* Submit Button */}
                 <input
                   type="submit"
-                  value="Log-In"
+                  value="Register"
                   className="w-full text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[rgb(56,134,233)] border-orange-500 border"
                 />
 

@@ -2,19 +2,94 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import Buttons from "../../components/Button/Buttons";
 import { Divider } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/Auth/useAuth";
+import { toast } from "react-toastify";
+import { axiosSecure } from "../../hooks/AxiosSecure/useAxiosSecure";
 
 const Login = () => {
-  const loginHandler = event => {
+  const { UserLogin, setLoading, UserLogout, googleLogin } = useAuth();
+  const location = useLocation();
+  const returnPath = location?.state || "/";
+  const navigate = useNavigate();
+  const loginHandler = async (event) => {
     event.preventDefault();
-    const email = event.target.email.value 
-    const password = event.target.password.value 
-    const confirmpassword = event.target.confirm.value
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const confirmpassword = event.target.confirm.value;
 
-    const loginInfo = {email , password, confirmpassword}
-    
-    console.log("🚀 ~ loginHandler ~ const:", loginInfo)
-  }
+    if (password !== confirmpassword) {
+      toast.error("Password not match");
+      return;
+    }
+    try {
+      const { data } = await axiosSecure.get("/users");
+      const user = data.find((user) => user.email === email);
+
+      UserLogin(email, password)
+        .then(() => {
+          if (user.status === "blocked") {
+            UserLogout().then(() => {
+              toast.error("Your Account Suspended");
+              navigate("/registration");
+            });
+            return;
+          }
+          toast.success("Login Success");
+          setLoading(true);
+          navigate(returnPath);
+        })
+        .catch(() => {
+          toast.error("email or password wrong");
+        });
+    } catch (err) {
+      toast.error("try again");
+    }
+  };
+
+  const googleHandler = () => {
+    googleLogin().then(async (current) => {
+      // console.log(current)
+      const { displayName, email, photoURL } = current.user;
+      const googleInfo = {
+        displayName,
+        email,
+        photoURL,
+        userRole: "user",
+        status: "normal",
+        system: "google",
+      };
+      const { data } = await axiosSecure.get("/users");
+      console.log(data);
+      const checkedUser = data.find((users) => users.system === "google");
+      if (checkedUser?.email === email) {
+        toast.success("Login Success with Google");
+        navigate(returnPath);
+        return;
+      }
+      // console.log(googleInfo)
+      await axiosSecure.post("/users", googleInfo)
+        .then(async () => {
+          const { data } = await axiosSecure.get("/users");
+          console.log(data);
+          const usered = data.find(
+            (users) => users.email === current.user.email
+          );
+          if (usered.status === "blocked") {
+            UserLogout().then(() => {
+              toast.error("Your Account Suspended");
+              navigate("/registration");
+            });
+            return;
+          }
+          toast.success("Login Success with Google");
+          navigate(returnPath);
+        })
+        .catch(() => {
+          toast.error("Try Again with google");
+        });
+    });
+  };
   return (
     <>
       <div className="pt-10 w-2/4 mx-auto">
@@ -99,8 +174,6 @@ const Login = () => {
                   </div>
                 </div>
 
-    
-
                 {/* Submit Button */}
                 <input
                   type="submit"
@@ -110,8 +183,9 @@ const Login = () => {
 
                 {/* Registration Link */}
                 <p className="text-sm font-light text-gray-900">
-                 Create a new accounts?{" "}
-                  <Link to='/registration'
+                  Create a new accounts?{" "}
+                  <Link
+                    to="/registration"
                     href="#"
                     className="font-medium text-primary-600 hover:underline"
                   >
@@ -125,16 +199,17 @@ const Login = () => {
               className=" rounded-md w-full mx-auto max-w-sm  bg-transparent p-6 "
               id="login-model"
             >
-
               <div className="mt-4">
                 <a href="#" className="block">
-                  <button className="w-full text-center py-2 my-3 border flex items-center justify-center gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150">
+                  <button
+                    onClick={googleHandler}
+                    className="w-full text-center py-2 my-3 border flex items-center justify-center gap-2 border-slate-200 rounded-lg text-slate-700 hover:border-slate-400 hover:text-slate-900 hover:shadow transition duration-150"
+                  >
                     <span className="[&>svg]:h-7 [&>svg]:w-7 [&>svg]:fill-[#000000]">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 488 512"
                       >
-                        
                         <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
                       </svg>
                     </span>
