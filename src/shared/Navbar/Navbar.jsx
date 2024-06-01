@@ -3,6 +3,7 @@ import logo from "../../assets/logo.png";
 import { NavLink } from "react-router-dom";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { SiShopee } from "react-icons/si";
+import Buttons from "../../components/Button/Buttons";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -90,7 +91,7 @@ const Navbar = () => {
                 <MenuItem onClick={handleClose}>English</MenuItem>
               </Menu>
             </div>
-            <Button className="buttonStyle" variant="outlined">Join US</Button>
+            <Buttons text='join us' link='join-us' style='buttonStyle' />
             <button
               type="button"
               className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
