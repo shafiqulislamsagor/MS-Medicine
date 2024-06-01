@@ -4,13 +4,26 @@ import { NavLink } from "react-router-dom";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { SiShopee } from "react-icons/si";
 import Buttons from "../../components/Button/Buttons";
+import useAuth from './../../hooks/Auth/useAuth';
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const {user , UserLogout} = useAuth()
+  console.log(user)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const logoutHandler = () =>{
+    UserLogout()
+    .then(()=>{
+      toast.success('Logout Success...!')
+    })
+    .catch(()=>{
+      toast.error('Logout Failed...!')
+    })
+  }
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -91,7 +104,7 @@ const Navbar = () => {
                 <MenuItem onClick={handleClose}>English</MenuItem>
               </Menu>
             </div>
-            <Buttons text='join us' link='join-us' style='buttonStyle' />
+            {!user ? <Buttons text='join us' link='join-us' style='buttonStyle' /> :
             <button
               type="button"
               className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
@@ -102,10 +115,10 @@ const Navbar = () => {
               <span className="sr-only">Open user menu</span>
               <img
                 className="w-8 h-8 rounded-full"
-                src="/docs/images/people/profile-picture-3.jpg"
+                src={user?.photoURL}
                 alt="user photo"
               />
-            </button>
+            </button>}
             {dropdownOpen && (
               <div
                 className="z-50 absolute top-7 right-0 my-4 text-base list-none bg-blue-200 divide-y divide-gray-100 rounded-lg shadow "
@@ -113,10 +126,10 @@ const Navbar = () => {
               >
                 <div className="px-4 py-3">
                   <span className="block text-sm text-gray-900 ">
-                    Bonnie Green
+                    {user?.displayName}
                   </span>
                   <span className="block text-sm text-gray-500 truncate ">
-                    name@flowbite.com
+                    {user?.email}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
@@ -137,12 +150,12 @@ const Navbar = () => {
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <span
+                      onClick={logoutHandler}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
                     >
                       Log out
-                    </a>
+                    </span>
                   </li>
                 </ul>
               </div>
