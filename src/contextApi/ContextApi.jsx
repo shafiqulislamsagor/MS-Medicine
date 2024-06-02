@@ -40,7 +40,7 @@ const ContextApi = ({ children }) => {
 
     const UserLogout = async () => {
         setLoading(false)
-        await axiosSecure(`${import.meta.env.VITE_API_URL}/jwt-logout`, {
+        await axiosSecure(`${import.meta.env.VITE_SERVER_URL}/jwt-logout`, {
             withCredentials: true,
         })
         return signOut(auth)

@@ -35,9 +35,13 @@ const Login = () => {
             });
             return;
           }
-          toast.success("Login Success");
-          setLoading(true);
-          navigate(returnPath);
+          axiosSecure
+            .post(`${import.meta.env.VITE_SERVER_URL}/jwt`, { email })
+            .then(() => {
+              toast.success("Login Success");
+              setLoading(true);
+              navigate(returnPath);
+            });
         })
         .catch(() => {
           toast.error("email or password wrong");
@@ -52,23 +56,29 @@ const Login = () => {
       // console.log(current)
       const { displayName, email, photoURL } = current.user;
       const googleInfo = {
-        username:displayName,
+        username: displayName,
         email,
-        img:photoURL,
+        img: photoURL,
         userRole: "user",
         status: "normal",
         system: "google",
       };
       const { data } = await axiosSecure.get("/users");
-      console.log(data);
+      // console.log(data);
       const checkedUser = data.find((users) => users.system === "google");
       if (checkedUser?.email === email) {
-        toast.success("Login Success with Google");
-        navigate(returnPath);
+        console.log(`${import.meta.env.VITE_SERVER_URL}/jwt`)
+        await axiosSecure.post(`${import.meta.env.VITE_SERVER_URL}/jwt`, { email })
+        .then(()=>{
+          toast.success("Login Success with Google");
+          navigate(returnPath);
+        })
+        
         return;
       }
       // console.log(googleInfo)
-      await axiosSecure.post("/users", googleInfo)
+      await axiosSecure
+        .post("/users", googleInfo)
         .then(async () => {
           const { data } = await axiosSecure.get("/users");
           console.log(data);
@@ -82,8 +92,12 @@ const Login = () => {
             });
             return;
           }
-          toast.success("Login Success with Google");
-          navigate(returnPath);
+          await axiosSecure.post(`${import.meta.env.VITE_SERVER_URL}/jwt`, { email })
+          .then(()=>{
+            toast.success("Login Success with Google");
+            navigate(returnPath);
+          })
+          
         })
         .catch(() => {
           toast.error("Try Again with google");

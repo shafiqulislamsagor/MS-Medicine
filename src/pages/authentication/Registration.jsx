@@ -1,7 +1,7 @@
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import Buttons from "../../components/Button/Buttons";
-import {  MenuItem, Select } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import useImageUpload from "../../hooks/uploadImage/useImage";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -10,62 +10,66 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import useAuth from "../../hooks/Auth/useAuth";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 
-
 // import { useState } from "react";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Registration = () => {
-  const axiosPublic = useAxiosSecure()
-  const navigate = useNavigate()
-const { uploadImage} = useImageUpload()
-const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const { uploadImage } = useImageUpload();
+  const { UserCreate, setLoading, UserUpdate, UserLogout } = useAuth();
 
-  const registrationHandle = async(event) => {
-    event.preventDefault()
+  const registrationHandle = async (event) => {
+    event.preventDefault();
     // setrole();
-    const username = event.target.username.value
-    const email = event.target.email.value
-    const userRole = event.target.Userrole.value
-    const image = event.target.image.files[0]
-    console.log(user)
-    const password = event.target.password.value
+    const username = event.target.username.value;
+    const email = event.target.email.value;
+    const userRole = event.target.Userrole.value;
+    const image = event.target.image.files[0];
+    // console.log(user)
+    const password = event.target.password.value;
     const img = await uploadImage(image);
-    console.log(img)
+    // console.log(img)
 
-      const userInfo = { username, password, userRole, img, email , status:'normal'};
-      console.log('🚀 ~ registrationHandle ~ userInfo:', userInfo);
+    const userInfo = {
+      username,
+      password,
+      userRole,
+      img,
+      email,
+      status: "normal",
+    };
+    // console.log('🚀 ~ registrationHandle ~ userInfo:', userInfo);
 
-    
-      try{
-        await UserCreate(email,password)
-      .then(()=>{
-        UserUpdate(username,img)
-        .then(async(current)=>{
-          console.log(current)
-          await axiosPublic.post('/users',userInfo)
-          .then(()=>{
-            setLoading(true)
-            UserLogout()
-            toast.success('New Account Created Successfully ..!!!')
-            navigate('/join-us')
-            event.target.reset()
-          }).catch(()=>{
-            console.log('Something went wrong')
-          })
+    try {
+      await UserCreate(email, password)
+        .then(() => {
+          UserUpdate(username, img).then(async (current) => {
+            console.log(current);
+            await axiosSecure
+              .post("/users", userInfo)
+              .then(() => {
+                axiosSecure.post(`${import.meta.env.VITE_SERVER_URL}/jwt`, { email })
+                  .then(() => {
+                    setLoading(true);
+                    UserLogout();
+                    toast.success("New Account Created Successfully ..!!!");
+                    navigate("/join-us");
+                    event.target.reset();
+                  });
+              })
+              .catch(() => {
+                console.log("Something went wrong");
+              });
+          });
         })
-       
-      })
-      .catch(()=>{
-    toast.error('Already Email used for creating...!!!')
-    event.target.reset()
-      })
-      }
-      catch(error){
-        console.log(error)
-      }
-    
-    
-    
+        .catch(() => {
+          toast.error("Already Email used for creating...!!!");
+          event.target.reset();
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -81,7 +85,10 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
               <p className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Create an new account
               </p>
-              <form onSubmit={registrationHandle} className="space-y-4 md:space-y-6">
+              <form
+                onSubmit={registrationHandle}
+                className="space-y-4 md:space-y-6"
+              >
                 <div>
                   <label
                     htmlFor="user"
@@ -116,7 +123,7 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
                       <MdOutlineMailOutline className="w-4 h-4 text-gray-500" />
                     </span>
                     <input
-                    name="email"
+                      name="email"
                       type="email"
                       id="email"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
@@ -144,10 +151,10 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
                       labelId="demo-simple-select-helper-label"
                       id="demo-simple-select-helper"
                       className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-0"
-                    //   value={role}
+                      //   value={role}
                       label="role"
                       required
-                      defaultValue={'user'}
+                      defaultValue={"user"}
                       name="Userrole"
                     >
                       <MenuItem value={"user"}>User</MenuItem>
@@ -158,22 +165,22 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
                 {/* image uploading */}
 
                 <div>
-                <label
+                  <label
                     htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
                     Your Uploaded Photo
                   </label>
                   <div className="flex">
-                  <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                    <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                       <MdOutlineAddPhotoAlternate className="w-4 h-4 text-gray-500" />
                     </span>
-                  <input
-                    className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
-                    id="file_input"
-                    type="file"
-                    name="image"
-                  />
+                    <input
+                      className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5"
+                      id="file_input"
+                      type="file"
+                      name="image"
+                    />
                   </div>
                 </div>
                 {/* Password */}
@@ -241,12 +248,11 @@ const {user ,UserCreate , setLoading, UserUpdate , UserLogout} = useAuth()
                     href="#"
                     className="font-medium text-primary-600 hover:underline"
                   >
-                   Log-in
+                    Log-in
                   </Link>
                 </p>
               </form>
             </div>
-            
           </div>
         </section>
       </div>
