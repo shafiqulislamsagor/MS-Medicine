@@ -1,8 +1,10 @@
+import SliderBanner from "../../components/slider/Slider";
+
 
 const Home = () => {
     return (
         <div>
-           Home
+           <SliderBanner/>
         </div>
     );
 };

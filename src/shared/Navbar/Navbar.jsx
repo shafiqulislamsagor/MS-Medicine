@@ -55,7 +55,7 @@ const Navbar = () => {
           className="flex relative gap-2 py-2 px-3  text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
         >
           <SiShopee className="text-xl"/> card
-          <span className="text-sm absolute -top-2 -right-3 price-color">0</span>
+          <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:-right-3 price-color">0</span>
         </a>
       </li>
     </>
@@ -63,7 +63,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-blue-100 border-gray-200 ">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="max-w-screen-xl flex  items-center justify-between mx-auto py-4 md:p-4">
           <NavLink
             to="/"
             className="flex items-center space-x-1 rtl:space-x-reverse"
@@ -73,7 +73,7 @@ const Navbar = () => {
               Medicine
             </span>
           </NavLink>
-          <div className="flex relative gap-3 items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <div className="flex relative gap-0 md:gap-3 items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <div>
               <Button
               className="buttonDefaultStyle"
@@ -188,7 +188,7 @@ const Navbar = () => {
           </div>
           <div
             className={`items-center justify-between ${
-              navbarOpen ? "flex" : "hidden"
+              navbarOpen ? "absolute top-10 z-40 w-1/2 right-0" : "hidden"
             } w-full md:flex md:w-auto md:order-1`}
             id="navbar-user"
           >
