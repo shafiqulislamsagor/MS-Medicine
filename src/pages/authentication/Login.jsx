@@ -28,7 +28,7 @@ const Login = () => {
 
       UserLogin(email, password)
         .then(() => {
-          if (user.status === "blocked") {
+          if (user.status) {
             UserLogout().then(() => {
               toast.error("Your Account Suspended");
               navigate("/registration");
@@ -60,7 +60,7 @@ const Login = () => {
         email,
         img: photoURL,
         userRole: "user",
-        status: "normal",
+        status: false,
         system: "google",
       };
       const { data } = await axiosSecure.get("/users");
@@ -85,7 +85,7 @@ const Login = () => {
           const usered = data.find(
             (users) => users.email === current.user.email
           );
-          if (usered.status === "blocked") {
+          if (usered.status) {
             UserLogout().then(() => {
               toast.error("Your Account Suspended");
               navigate("/registration");

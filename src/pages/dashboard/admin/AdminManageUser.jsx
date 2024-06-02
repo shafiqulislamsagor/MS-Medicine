@@ -14,17 +14,16 @@ const AdminManageUser = () => {
     queryKey: ["users"],
     queryFn: async () => {
       const response = await axiosSecure.get("/users");
-      return response.data; 
+      return response.data;
     },
   });
 
-  const { mutate: roleChange } = useMutation({
+  const { mutate: roleChanged } = useMutation({
     mutationFn: async ({ id, role }) => {
-      const { data } = await axiosSecure.patch(`/user/${id}`, { role });
+      const { data } = await axiosSecure.patch(`/users/${id}`, { role });
       return data;
     },
-    onSuccess: async (data) => {
-      console.log(data);
+    onSuccess: async () => {
       refetch();
       toast.success(`Role changed successfully`);
     },
@@ -35,13 +34,32 @@ const AdminManageUser = () => {
   });
 
   const roleHandle = (id, event) => {
-    const setRole = event.target.value;
-    console.log(setRole, id);
-    roleChange({ id, role: setRole });
+    const role = event.target.value;
+    // console.log(setRole, id);
+    roleChanged({ id, role });
   };
 
-  const blockHandler = () => {
-    console.log("blockHandler");
+  const { mutate: blocked } = useMutation({
+    mutationFn: async ({ id, status }) => {
+      const { data } = await axiosSecure.patch(`/user/${id}`, { status });
+      return data;
+    },
+    onSuccess: async () => {
+      refetch();
+      toast.success(`Your action successfully`);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`try again`);
+    },
+  });
+
+  const blockHandler = (id, status) => {
+    blocked({ id, status });
+  };
+
+  const unblockHandler = (id, status) => {
+    blocked({ id, status });
   };
 
   if (error) return <h2>Error</h2>;
@@ -99,9 +117,21 @@ const AdminManageUser = () => {
                   </select>
                 </td>
                 <td className="px-6 py-4">
-                  <button onClick={blockHandler} className="text-red-600 font-bold">
-                    Block
-                  </button>
+                  {!user.status ? (
+                    <button
+                      onClick={() => blockHandler(user._id, true)}
+                      className="text-red-600 font-bold"
+                    >
+                      Block
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => unblockHandler(user._id, false)}
+                      className="text-red-600 font-bold"
+                    >
+                      Unblock
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

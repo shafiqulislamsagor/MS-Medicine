@@ -37,7 +37,7 @@ const Registration = () => {
       userRole,
       img,
       email,
-      status: "normal",
+      status: false,
     };
     // console.log('🚀 ~ registrationHandle ~ userInfo:', userInfo);
 
