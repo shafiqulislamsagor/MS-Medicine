@@ -134,12 +134,12 @@ const Navbar = () => {
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
-                    <a
-                      href="#"
+                    <NavLink
+                      to='/dashboard'
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
                     >
                       Dashboard
-                    </a>
+                    </NavLink>
                   </li>
                   <li>
                     <a
