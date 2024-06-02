@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 const Navbar = () => {
   const {user , UserLogout} = useAuth()
-  console.log(user)
+  // console.log(user)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -62,7 +62,7 @@ const Navbar = () => {
   );
   return (
     <>
-      <nav className="bg-blue-100 border-gray-200 ">
+      <nav className="bg-blue-100 border-gray-200 sticky top-0 z-50 ">
         <div className="max-w-screen-xl flex  items-center justify-between mx-auto py-4 md:p-4">
           <NavLink
             to="/"

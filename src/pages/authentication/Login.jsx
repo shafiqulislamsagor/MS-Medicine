@@ -52,9 +52,9 @@ const Login = () => {
       // console.log(current)
       const { displayName, email, photoURL } = current.user;
       const googleInfo = {
-        displayName,
+        username:displayName,
         email,
-        photoURL,
+        img:photoURL,
         userRole: "user",
         status: "normal",
         system: "google",

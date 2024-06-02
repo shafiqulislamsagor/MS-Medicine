@@ -7,7 +7,7 @@ import DashboardWork from "./DashboardWork";
 const Dashboard = () => {
   return (
     <div className="flex">
-      <div className="bg-[#f3644a]  w-1/4 h-[calc(100vh-72px)]">
+      <div className="bg-[#f3644a] sticky top-[72px]  w-1/4 h-[calc(100vh-72px)]">
         <AdminMenu />
         {/* <Seller/> */}
         {/* <UserMenu/> */}

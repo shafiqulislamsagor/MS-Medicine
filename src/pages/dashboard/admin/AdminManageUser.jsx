@@ -1,85 +1,110 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../../hooks/AxiosPublic/useAxiosPublic";
+import { toast } from "react-toastify";
+
 const AdminManageUser = () => {
+  const axiosSecure = useAxiosPublic();
+
+  const {
+    isLoading,
+    error,
+    refetch,
+    data: users,
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await axiosSecure.get("/users");
+      return response.data; 
+    },
+  });
+
+  const { mutate: roleChange } = useMutation({
+    mutationFn: async ({ id, role }) => {
+      const { data } = await axiosSecure.patch(`/user/${id}`, { role });
+      return data;
+    },
+    onSuccess: async (data) => {
+      console.log(data);
+      refetch();
+      toast.success(`Role changed successfully`);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`Failed to change role`);
+    },
+  });
+
+  const roleHandle = (id, event) => {
+    const setRole = event.target.value;
+    console.log(setRole, id);
+    roleChange({ id, role: setRole });
+  };
+
+  const blockHandler = () => {
+    console.log("blockHandler");
+  };
+
+  if (error) return <h2>Error</h2>;
+
+  if (isLoading) return <h2>Loading.....</h2>;
+
+  if (users.length === 0) return <h2>No users found</h2>;
+
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Product name
+                Image
               </th>
               <th scope="col" className="px-6 py-3">
-                Color
+                User Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+                Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Role
               </th>
               <th scope="col" className="px-6 py-3">
-                Action
+                Role Change
+              </th>
+              <th scope="col" className="px-6 py-3">
+                User Block
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b ">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                Apple MacBook Pro 17&quot;
-              </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
+            {users.map((user) => (
+              <tr key={user._id} className="bg-white border-b">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  Edit
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white border-b ">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                Microsoft Surface Pro
-              </th>
-              <td className="px-6 py-4">White</td>
-              <td className="px-6 py-4">Laptop PC</td>
-              <td className="px-6 py-4">$1999</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600  hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
-            <tr className="bg-white ">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
-              >
-                Magic Mouse 2
-              </th>
-              <td className="px-6 py-4">Black</td>
-              <td className="px-6 py-4">Accessories</td>
-              <td className="px-6 py-4">$99</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  Edit
-                </a>
-              </td>
-            </tr>
+                  <img src={user.img} className="w-8 h-8" alt={user.username} />
+                </th>
+                <td className="px-6 py-4">{user.username}</td>
+                <td className="px-6 py-4">{user.email}</td>
+                <td className="px-6 py-4">{user.userRole}</td>
+                <td className="px-6 py-4">
+                  <select
+                    onChange={(event) => roleHandle(user._id, event)}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  >
+                    <option value="user">User</option>
+                    <option value="seller">Seller</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td className="px-6 py-4">
+                  <button onClick={blockHandler} className="text-red-600 font-bold">
+                    Block
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

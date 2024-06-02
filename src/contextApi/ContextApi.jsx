@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 import { PropTypes } from 'prop-types';
 import auth from "../firebase/firebase.cofig";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { axiosSecure } from "../hooks/AxiosSecure/useAxiosSecure";
 
 export const ContextAll = createContext(null)
 
@@ -39,9 +40,9 @@ const ContextApi = ({ children }) => {
 
     const UserLogout = async () => {
         setLoading(false)
-        // await axios(`${import.meta.env.VITE_API_URL}/logout`, {
-        //     withCredentials: true,
-        // })
+        await axiosSecure(`${import.meta.env.VITE_API_URL}/jwt-logout`, {
+            withCredentials: true,
+        })
         return signOut(auth)
     }
 
