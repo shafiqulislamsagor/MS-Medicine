@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
-      <div className="bg-[#f3644a] sticky top-[72px] w-1/4 h-[calc(100vh-72px)]">
+      <div className="bg-[#83a8dc] sticky top-[72px] w-1/5 h-[calc(100vh-72px)]">
         {currentUser?.userRole === "admin" && <AdminMenu />}
         {currentUser?.userRole === "seller" && <SellerMenu />}
         {currentUser?.userRole === "user" && <UserMenu />}

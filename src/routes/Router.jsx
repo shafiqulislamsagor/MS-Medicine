@@ -10,6 +10,7 @@ import ManageCatagory from "../pages/dashboard/admin/ManageCatagory";
 import PaymentManage from "../pages/dashboard/admin/PaymentManage";
 import Report from "../pages/dashboard/admin/Report";
 import Advirtisment from "../pages/dashboard/admin/Advirtisment";
+import SellerManageMadicine from "../pages/dashboard/seller/SellerManageMadicine";
 
 
 export const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
             {
               path:'admin-advertise',
               element: <Advirtisment/>
+            },
+            {
+              path:'seller-management-madicines',
+              element:<SellerManageMadicine/>
             }
           ]
         }
