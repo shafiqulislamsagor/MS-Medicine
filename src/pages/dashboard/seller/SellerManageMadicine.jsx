@@ -14,6 +14,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import { toast } from "react-toastify";
 import useImageUpload from '../../../hooks/uploadImage/useImage';
+import useAuth from '../../../hooks/Auth/useAuth';
 
 const style = {
   position: "absolute",
@@ -33,11 +34,12 @@ const SellerManageMadicine = () => {
   const handleClose = () => setOpen(false);
   const { uploadImage } = useImageUpload();
   const axiosSecure = useAxiosSecure();
+  const {user} = useAuth()
 
   const { data:productData, isLoading, isError, refetch } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
-      const { data } = await axiosSecure.get('/products');
+      const { data } = await axiosSecure.get(`/products/${user.email}`);
       return data;
     },
   });
@@ -69,6 +71,7 @@ const SellerManageMadicine = () => {
       img,
       price,
       discount,
+      seller:{...user}
     };
     console.log(product);
 

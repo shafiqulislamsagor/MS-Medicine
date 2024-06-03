@@ -11,6 +11,8 @@ import PaymentManage from "../pages/dashboard/admin/PaymentManage";
 import Report from "../pages/dashboard/admin/Report";
 import Advirtisment from "../pages/dashboard/admin/Advirtisment";
 import SellerManageMadicine from "../pages/dashboard/seller/SellerManageMadicine";
+import Shop from "../pages/shop/Shop";
+import Card from "../pages/card/Card";
 
 
 export const router = createBrowserRouter([
@@ -21,6 +23,14 @@ export const router = createBrowserRouter([
         {
           path: "/",
           element: <Home/>
+        },
+        {
+          path:'/shop',
+          element:<Shop/>
+        },
+        {
+          path:'/card',
+          element:<Card/>
         },
         {
           path:'/dashboard',

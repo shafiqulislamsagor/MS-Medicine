@@ -33,30 +33,30 @@ const Navbar = () => {
   const menu = (
     <>
       <li>
-        <a
-          href="#"
-          className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase"
+        <NavLink
+          to={'/'}
+          className={({ isActive }) => !isActive ? 'flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
           aria-current="page"
         >
           Home
-        </a>
+        </NavLink>
       </li>
       <li>
-        <a
-          href="#"
-          className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
+        <NavLink 
+        to={'/shop'}
+        className={({ isActive }) => !isActive ? 'flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
         >
           Shop
-        </a>
+        </NavLink>
       </li>
       <li>
-        <a
-          href="#"
-          className="flex relative gap-2 py-2 px-3  text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
+        <NavLink
+          to={'/card'}
+          className={({ isActive }) => !isActive ? 'flex gap-2 relative py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex gap-2 relative py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
         >
           <SiShopee className="text-xl"/> card
-          <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:-right-3 price-color">0</span>
-        </a>
+          <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:left-[70px] price-color">0</span>
+        </NavLink>
       </li>
     </>
   );
