@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -9,17 +9,13 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import { Button } from "@mui/material";
+import { toast } from "react-toastify";
+import useAuth from "../../hooks/Auth/useAuth";
 
-const CardComponents = ({ item }) => {
+const CardComponents = ({ item, setCardRender }) => {
+  const { setRender } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const {
-    _id,
-    discount,
-    price,
-    img,
-    company,
-    name,
-  } = item;
+  const { _id, discount, price, img, company, name } = item;
   // const {
   //   _id,
   //   discount,
@@ -41,6 +37,7 @@ const CardComponents = ({ item }) => {
     data: currentProductData,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["checkQuantity"],
     queryFn: async () => {
@@ -49,14 +46,40 @@ const CardComponents = ({ item }) => {
     },
   });
 
+  const { mutate: deleteProduct } = useMutation({
+    mutationFn: async ({ id }) => {
+      const { data } = await axiosSecure.delete(`/buy-products/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+     
+      refetch();
+      toast.success("selecte product delete successfully");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Failed to delete product");
+    },
+  });
+
+  const deletedOne = (id) => {
+    deleteProduct({ id });
+    setCardRender(true);
+    setRender(true);
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading products</div>;
 
-  const checkedProduct = currentProductData.filter(produc => produc.productId == _id)
+  const checkedProduct = currentProductData.filter(
+    (produc) => produc.productId == _id
+  );
 
   return (
     <div className="relative">
-      <span className="absolute right-5 buttonStyle px-2 bg-blue-200 rounded-full">{checkedProduct.length}</span>
+      <span className="absolute right-5 buttonStyle px-2 bg-blue-200 rounded-full">
+        {checkedProduct.length}
+      </span>
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
@@ -76,17 +99,24 @@ const CardComponents = ({ item }) => {
             <span className="font-bold">Company:</span> {company}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
-            <span className="font-bold">Price:</span> <span className="line-through text-xs">${price * checkedProduct.length}</span> ${price * checkedProduct.length - discountAmount}
+            <span className="font-bold">Price:</span>{" "}
+            <span className="line-through text-xs">
+              ${price * checkedProduct.length}
+            </span>{" "}
+            ${price * checkedProduct.length - discountAmount}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
-            <span className="font-bold">Discount:</span> ${discountAmount * checkedProduct.length}({discount}%)
+            <span className="font-bold">Discount:</span> $
+            {discountAmount * checkedProduct.length}({discount}%)
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
             <span className="font-bold">Par Unit:</span> ${price}
           </Typography>
         </CardContent>
         <CardActions className="flex justify-end">
-          <Button size="small">Delete</Button>
+          <Button onClick={() => deletedOne(_id)} size="small">
+            Delete
+          </Button>
         </CardActions>
       </Card>
     </div>

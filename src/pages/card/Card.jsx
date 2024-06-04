@@ -2,13 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import CardComponents from "../../components/cardComponents/CardComponents";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import Buttons from "../../components/Button/Buttons";
+import { useState } from "react";
 
 const Card = () => {
+  const [cardRender, setCardRender] = useState(false);
   const axiosSecure = useAxiosSecure();
   const {
     data: BuyProduct,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["BuyProduct"],
     queryFn: async () => {
@@ -23,7 +26,14 @@ const Card = () => {
       return response.data;
     },
   });
- 
+  const rerender = () => {
+    cardRender && refetch();
+    setCardRender(false);
+  };
+  
+  if(cardRender) return rerender()
+
+  console.log(cardRender)
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
@@ -42,7 +52,11 @@ const Card = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProductBuy?.map((item) => (
-          <CardComponents key={item._id} item={item} />
+          <CardComponents
+            key={item._id}
+            item={item}
+            setCardRender={setCardRender}
+          />
         ))}
       </div>
     </div>
