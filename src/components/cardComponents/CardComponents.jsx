@@ -62,6 +62,7 @@ const CardComponents = ({ item, setCardRender }) => {
     },
   });
 
+
   const deletedOne = (id) => {
     deleteProduct({ id });
     setCardRender(true);
