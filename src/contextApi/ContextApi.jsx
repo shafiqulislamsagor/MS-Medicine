@@ -10,7 +10,7 @@ import { axiosSecure } from "../hooks/AxiosSecure/useAxiosSecure";
 export const ContextAll = createContext(null)
 
 const ContextApi = ({ children }) => {
-
+    const [render , setRender] = useState(false)
     const [user, setUser] = useState({})
     const [loading, setLoading] = useState(false)
 
@@ -50,6 +50,7 @@ const ContextApi = ({ children }) => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
             setLoading(true)
+            setRender(false)
         })
         return () => {
             unSubscribe()
@@ -57,7 +58,7 @@ const ContextApi = ({ children }) => {
     }, [])
 
 
-    const value = { user, loading,setUser , setLoading , UserCreate, UserLogin, UserUpdate, googleLogin , UserLogout }
+    const value = { user, loading,setUser ,render , setRender  , setLoading , UserCreate, UserLogin, UserUpdate, googleLogin , UserLogout }
     return (
         <ContextAll.Provider value={value}>{children}</ContextAll.Provider>
     );

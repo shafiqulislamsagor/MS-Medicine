@@ -6,9 +6,22 @@ import { SiShopee } from "react-icons/si";
 import Buttons from "../../components/Button/Buttons";
 import useAuth from './../../hooks/Auth/useAuth';
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
+
 
 const Navbar = () => {
-  const {user , UserLogout} = useAuth()
+  const {user , UserLogout ,render ,setRender } = useAuth()
+  const axiosPublic = useAxiosPublic()
+  const {data:buyProducts , isError , isLoading , refetch } = useQuery({
+    queryKey:['buy'],
+    queryFn: async () => {
+      const response = await axiosPublic.get('/buy-products')
+      return response.data
+    }
+  })
+
+  // console.log(render)
   // console.log(user)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -51,16 +64,29 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
-          to={'/card'}
-          className={({ isActive }) => !isActive ? 'flex gap-2 relative py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex gap-2 relative py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
-        >
-          <SiShopee className="text-xl"/> card
-          <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:left-[70px] price-color">0</span>
-        </NavLink>
+  to={'/card'}
+  className={({ isActive }) =>
+    !isActive
+      ? 'flex gap-2 relative py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase'
+      : 'flex gap-2 relative py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'
+  }
+>
+  <SiShopee className="text-xl" /> card
+  <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:left-[70px] price-color">
+      {buyProducts?.length}
+    </span>
+</NavLink>
+
       </li>
     </>
   );
-  return (
+  if(isLoading) return null
+  if(isError) return null
+  if(render) {
+    refetch()
+    setRender(false)
+  }
+  return(
     <>
       <nav className="bg-blue-100 border-gray-200 sticky top-0 z-50 ">
         <div className="max-w-screen-xl flex  items-center justify-between mx-auto py-4 md:p-4">
