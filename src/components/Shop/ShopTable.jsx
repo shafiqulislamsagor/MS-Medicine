@@ -29,6 +29,7 @@ const ShopTable = () => {
       (findProduct) => findProduct?._id === id
     );
     const {
+      _id,
       discount,
       price,
       img,
@@ -51,6 +52,7 @@ const ShopTable = () => {
       description,
       generic,
       name,
+      productId:_id
     };
 
     if (selected) {

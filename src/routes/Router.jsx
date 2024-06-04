@@ -13,6 +13,7 @@ import Advirtisment from "../pages/dashboard/admin/Advirtisment";
 import SellerManageMadicine from "../pages/dashboard/seller/SellerManageMadicine";
 import Shop from "../pages/shop/Shop";
 import Card from "../pages/card/Card";
+import Checkout from "../pages/checkout/Checkout";
 
 
 export const router = createBrowserRouter([
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
         {
           path:'/card',
           element:<Card/>
+        },
+        {
+          path:'/checkout',
+          element:<Checkout/>
         },
         {
           path:'/dashboard',

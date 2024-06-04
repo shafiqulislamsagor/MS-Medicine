@@ -1,64 +1,96 @@
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button } from "@mui/material";
 
+const CardComponents = ({ item }) => {
+  const axiosSecure = useAxiosSecure();
+  const {
+    _id,
+    discount,
+    price,
+    img,
+    company,
+    name,
+  } = item;
+  // const {
+  //   _id,
+  //   discount,
+  //   productId,
+  //   price,
+  //   img,
+  //   status,
+  //   unit,
+  //   company,
+  //   category,
+  //   description,
+  //   generic,
+  //   name,
+  // } = item;
 
-const CardComponents = () => {
+  const discountAmount = parseInt(price * (discount / 100));
 
+  const {
+    data: currentProductData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["checkQuantity"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get("/buy-products");
+      return data;
+    },
+  });
 
-  
-    return (
-      <>
-        <Card sx={{ maxWidth: 345 }}>
-          <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                R
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title="Shrimp and Chorizo Paella"
-            subheader="September 14, 2016"
-          />
-          <CardMedia
-            component="img"
-            height="194"
-            image="/static/images/cards/paella.jpg"
-            alt="Paella dish"
-          />
-          <CardMedia
-            sx={{ height: 140 }}
-            image="/static/images/cards/contemplative-reptile.jpg"
-            title="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000
-              species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
-      </>
-    );
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading products</div>;
+
+  const checkedProduct = currentProductData.filter(produc => produc.productId == _id)
+
+  return (
+    <div className="relative">
+      <span className="absolute right-5 buttonStyle px-2 bg-blue-200 rounded-full">{checkedProduct.length}</span>
+      <Card sx={{ maxWidth: 345 }}>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {name.charAt(0)}
+            </Avatar>
+          }
+          title={name}
+          subheader={company}
+        />
+        <CardMedia sx={{ height: 140 }} image={img} title={name} />
+        <CardContent className="space-y-2">
+          <Typography gutterBottom variant="h5" component="div">
+            {name}
+          </Typography>
+          <Typography variant="body2" color="textPrimary" component="p">
+            <span className="font-bold">Company:</span> {company}
+          </Typography>
+          <Typography variant="body2" color="textPrimary" component="p">
+            <span className="font-bold">Price:</span> <span className="line-through text-xs">${price * checkedProduct.length}</span> ${price * checkedProduct.length - discountAmount}
+          </Typography>
+          <Typography variant="body2" color="textPrimary" component="p">
+            <span className="font-bold">Discount:</span> ${discountAmount * checkedProduct.length}({discount}%)
+          </Typography>
+          <Typography variant="body2" color="textPrimary" component="p">
+            <span className="font-bold">Par Unit:</span> ${price}
+          </Typography>
+        </CardContent>
+        <CardActions className="flex justify-end">
+          <Button size="small">Delete</Button>
+        </CardActions>
+      </Card>
+    </div>
+  );
 };
 
 export default CardComponents;
