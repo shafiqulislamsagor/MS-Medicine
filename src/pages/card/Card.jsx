@@ -61,18 +61,22 @@ const Card = () => {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
 
-  const filteredProductBuy = product.filter((item) => {
-    return BuyProduct.some((prodItem) => prodItem.productId === item._id);
+  const filteredProductBuy = product?.filter((item) => {
+    return BuyProduct?.some((prodItem) => prodItem?.productId === item?._id);
   });
 
+  if(filteredProductBuy === undefined) return
 
-// Use reduce to sum the values of the 'tk' property
-const totalSum = filteredProductBuy.reduce((sum, currentValue) => sum + parseInt(currentValue.price * (currentValue.discount / 100)), 0);
+
+const totalSum = BuyProduct.reduce((sum, currentValue) => sum + parseInt(currentValue.price * (currentValue.discount / 100)), 0);
+const mainPrice = BuyProduct.reduce((sum, currentValue) => sum + parseInt(currentValue.price), 0);
+
+const grandPrice = mainPrice - totalSum
 
   return (
     <div className="w-full md:w-5/6 mx-auto my-20">
       <div className="my-5 flex justify-between items-center">
-        <Buttons text={`Payment : $ ${totalSum}`} link="checkout" style="buttonDefaultStyle" />
+        <Buttons text={`Payment : $ ${grandPrice}`} link="checkout" style="buttonDefaultStyle" />
         <Button onClick={deleteAll} className="buttonDefaultStyle">Delete All</Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

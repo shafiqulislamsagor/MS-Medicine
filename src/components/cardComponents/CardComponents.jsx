@@ -104,7 +104,7 @@ const CardComponents = ({ item, setCardRender }) => {
             <span className="line-through text-xs">
               ${price * checkedProduct.length}
             </span>{" "}
-            ${price * checkedProduct.length - discountAmount}
+            ${price * checkedProduct.length - discountAmount * checkedProduct.length}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
             <span className="font-bold">Discount:</span> $

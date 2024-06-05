@@ -20,7 +20,7 @@ const Navbar = () => {
       return response.data
     }
   })
-
+console.log('navbar')
   // console.log(render)
   // console.log(user)
   const [anchorEl, setAnchorEl] = useState(null);

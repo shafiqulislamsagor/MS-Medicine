@@ -14,6 +14,7 @@ import SellerManageMadicine from "../pages/dashboard/seller/SellerManageMadicine
 import Shop from "../pages/shop/Shop";
 import Card from "../pages/card/Card";
 import Checkout from "../pages/checkout/Checkout";
+import Invoide from "../pages/invoide/Invoide";
 
 
 export const router = createBrowserRouter([
@@ -32,10 +33,6 @@ export const router = createBrowserRouter([
         {
           path:'/card',
           element:<Card/>
-        },
-        {
-          path:'/checkout',
-          element:<Checkout/>
         },
         {
           path:'/dashboard',
@@ -75,4 +72,6 @@ export const router = createBrowserRouter([
     },
     {path:'/join-us',element: <Login/>},
     {path:'/registration',element: <Registration/>},
+    {path:'/checkout',element: <Checkout/>},
+    {path:'/invoide',element: <Invoide/>},
   ]);
