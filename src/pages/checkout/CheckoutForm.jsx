@@ -5,7 +5,7 @@ import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import useAuth from "../../hooks/Auth/useAuth";
 import { toast } from "react-toastify";
 
-const CheckoutForm = ({ paymentCheck, total }) => {
+const CheckoutForm = ({ paymentCheck, total , discountAmount }) => {
     const [error, setError] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const stripe = useStripe();
@@ -79,7 +79,9 @@ const CheckoutForm = ({ paymentCheck, total }) => {
             // Save the payment in the database
             const payment = {
                 email: user.email,
+                paymentUser:user.displayName,
                 price: total,
+                discount: discountAmount,
                 transactionId: paymentIntent.id,
                 date: new Date(),
                 status: 'pending',
@@ -87,7 +89,8 @@ const CheckoutForm = ({ paymentCheck, total }) => {
             };
 
             try {
-                const res = await axiosSecure.post('/payments-products', payment);
+                const res = await axiosSecure.post('/payments-products', payment)
+                
                 console.log('Payment saved', res.data);
                 if (res.data?.insertedId) {
                     const deleteProduct =async () =>{
@@ -96,7 +99,7 @@ const CheckoutForm = ({ paymentCheck, total }) => {
                     }
                     deleteProduct()
                     toast.success('Payment was successfully')
-                    navigate('/invoide');
+                    navigate(`/invoide/${paymentIntent.id}`);
                 }
             } catch (error) {
                 console.error('Error saving payment:', error);

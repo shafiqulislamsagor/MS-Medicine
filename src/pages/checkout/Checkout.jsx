@@ -74,6 +74,7 @@ const grandPrice = mainPrice - totalSum
               <CheckoutForm
                 paymentCheck={paymentCheck}
                 total={grandPrice}
+                discountAmount={totalSum}
               />
             </Elements>
           </div>
