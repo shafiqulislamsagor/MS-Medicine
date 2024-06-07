@@ -48,7 +48,7 @@ const paidPrice = paid.reduce((sum, currentValue) => sum + parseInt(currentValue
             Paid Total
           </h5>
           <p className="font-normal text-gray-700 text-xl">
-            <CountUp delay={2} end={paidPrice} />
+           $ <CountUp delay={2} end={paidPrice} />
           </p>
         </div>
       </div>

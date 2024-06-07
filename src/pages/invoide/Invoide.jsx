@@ -71,7 +71,7 @@ const Invoice = () => {
                 <br />
                 Bypass Road
                 <br />
-                Sherput , Mymensingh
+                Sherpur , Mymensingh
                 <br />
                 Bangladesh
                 <br />
