@@ -24,7 +24,7 @@ const ShopTable = () => {
 
   const selectHandle = (event, id) => {
     const selected = event.target.checked;
-    console.log(selected);
+    // console.log(selected);
     const currentProduct = products.find(
       (findProduct) => findProduct?._id === id
     );
@@ -40,6 +40,7 @@ const ShopTable = () => {
       description,
       generic,
       name,
+      seller
     } = currentProduct;
     const buyProductInfo = {
       discount,
@@ -52,6 +53,7 @@ const ShopTable = () => {
       description,
       generic,
       name,
+      seller,
       productId:_id
     };
 

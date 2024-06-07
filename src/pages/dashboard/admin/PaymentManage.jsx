@@ -1,8 +1,9 @@
+import PaymentManageTable from "../../../roles/admin/PaymentManage";
 
 const PaymentManage = () => {
     return (
         <div>
-            payment
+            <PaymentManageTable/>
         </div>
     );
 };

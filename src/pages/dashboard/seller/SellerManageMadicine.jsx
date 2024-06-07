@@ -70,6 +70,7 @@ const SellerManageMadicine = () => {
       status,
       img,
       price,
+      ad:'Unavailable',
       discount,
       seller:{...user}
     };

@@ -6,7 +6,7 @@ const Seller = () => {
       <ul className="font-medium flex flex-col p-4 gap-8  mt-4 rounded-lg   ">
         <li>
           <NavLink
-            to={'seller-home'}
+            to={''}
             className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
           >
             Home
@@ -21,20 +21,20 @@ const Seller = () => {
           </NavLink>
         </li>
         <li>
-          <a
-            href="#"
+          <NavLink
+            to={'seller-payment-history'}
             className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
           >
             Payment History
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a
-            href="#"
+          <NavLink
+            to={'seller-advirties'}
             className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
           >
             Ask For Advertisement
-          </a>
+          </NavLink>
         </li>
       </ul>
     </div>

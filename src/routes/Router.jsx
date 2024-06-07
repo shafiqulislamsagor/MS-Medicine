@@ -15,6 +15,8 @@ import Shop from "../pages/shop/Shop";
 import Card from "../pages/card/Card";
 import Checkout from "../pages/checkout/Checkout";
 import Invoide from "../pages/invoide/Invoide";
+import SellerPaymentHistory from "../roles/seller/SellerPaymentHistory";
+import SellerAsk from "../roles/seller/SellerAsk";
 
 
 export const router = createBrowserRouter([
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
             {
               path:'seller-management-madicines',
               element:<SellerManageMadicine/>
+            },
+            {
+              path:'seller-payment-history',
+              element:<SellerPaymentHistory/>
+            },
+            {
+              path:'seller-advirties',
+              element:<SellerAsk/>
             }
           ]
         }
