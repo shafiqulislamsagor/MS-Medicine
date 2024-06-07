@@ -74,10 +74,10 @@ const SellerAsk = () => {
                   {p?.name}
                 </th>
                 <td className="px-6 py-4">{p?.discount}%</td>
-                <td className="px-6 py-4">{p?.ad}</td>
+                <td className="px-6 py-4">{p?.advirtise && 'Accepted' || p?.ad}</td>
                 <td className="px-6 py-4">
                   <div>
-                    <button disabled={p?.ad === 'requested'} onClick={()=>requestHandle(p?._id)} className={!p?.ad === 'requested' ? 'bg-green-500 text-black px-2 py-1 rounded-lg font-medium': 'bg-green-700 text-gray-100 px-2 py-1 rounded-lg font-medium line-through'}>
+                    <button disabled={p?.ad === 'requested'} onClick={()=>requestHandle(p?._id)} className={p?.ad === 'requested' ? 'bg-green-700 text-gray-100 px-2 py-1 rounded-lg font-medium line-through' : 'bg-green-500 text-black px-2 py-1 rounded-lg font-medium'}>
                       requsted
                     </button>
                   </div>
