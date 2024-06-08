@@ -17,6 +17,7 @@ import Checkout from "../pages/checkout/Checkout";
 import Invoide from "../pages/invoide/Invoide";
 import SellerPaymentHistory from "../roles/seller/SellerPaymentHistory";
 import SellerAsk from "../roles/seller/SellerAsk";
+import DetailsCategory from "../pages/DetailsCategory/DetailsCategory";
 
 
 export const router = createBrowserRouter([
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
         {
           path:'/card',
           element:<Card/>
+        },
+        {
+          path:'/category-details/:category',
+          element:<DetailsCategory/>
         },
         {
           path:'/dashboard',
