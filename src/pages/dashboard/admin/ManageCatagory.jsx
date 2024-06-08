@@ -1,8 +1,9 @@
+import Admincategory from "../../../roles/admin/Admincategory";
 
 const ManageCatagory = () => {
     return (
         <div>
-            Catagory
+            <Admincategory/>
         </div>
     );
 };

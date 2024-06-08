@@ -11,8 +11,13 @@ const Card = () => {
   const [cardRender, setCardRender] = useState(false);
   const { setRender } = useAuth();
   const axiosSecure = useAxiosSecure();
-  
-  const { data: BuyProduct, isLoading, isError, refetch } = useQuery({
+
+  const {
+    data: BuyProduct,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ["BuyProduct"],
     queryFn: async () => {
       const response = await axiosSecure.get("/buy-products");
@@ -34,7 +39,7 @@ const Card = () => {
       return data;
     },
     onSuccess: () => {
-      setRender(true)
+      setRender(true);
       refetch();
       toast.success("All products deleted successfully");
     },
@@ -54,7 +59,6 @@ const Card = () => {
       setCardRender(false);
     }
   };
-  
 
   if (cardRender) return rerender();
 
@@ -65,23 +69,39 @@ const Card = () => {
     return BuyProduct?.some((prodItem) => prodItem?.productId === item?._id);
   });
 
-  if(filteredProductBuy === undefined) return
+  if (filteredProductBuy === undefined) return;
 
+  const totalSum = BuyProduct.reduce(
+    (sum, currentValue) =>
+      sum + parseInt(currentValue.price * (currentValue.discount / 100)),
+    0
+  );
+  const mainPrice = BuyProduct.reduce(
+    (sum, currentValue) => sum + parseInt(currentValue.price),
+    0
+  );
 
-const totalSum = BuyProduct.reduce((sum, currentValue) => sum + parseInt(currentValue.price * (currentValue.discount / 100)), 0);
-const mainPrice = BuyProduct.reduce((sum, currentValue) => sum + parseInt(currentValue.price), 0);
-
-const grandPrice = mainPrice - totalSum
+  const grandPrice = mainPrice - totalSum;
 
   return (
     <div className="w-full md:w-5/6 mx-auto my-20">
       <div className="my-5 flex justify-between items-center">
-        <Buttons text={`Payment : $ ${grandPrice}`} link="checkout" style="buttonDefaultStyle" />
-        <Button onClick={deleteAll} className="buttonDefaultStyle">Delete All</Button>
+        <Buttons
+          text={`Payment : $ ${grandPrice}`}
+          link="checkout"
+          style="buttonDefaultStyle"
+        />
+        <Button onClick={deleteAll} className="buttonDefaultStyle">
+          Delete All
+        </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProductBuy?.map((item) => (
-          <CardComponents key={item._id} item={item} setCardRender={setCardRender} />
+          <CardComponents
+            key={item._id}
+            item={item}
+            setCardRender={setCardRender}
+          />
         ))}
       </div>
     </div>

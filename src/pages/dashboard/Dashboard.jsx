@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="bg-[#83a8dc] sticky top-[72px] md:w-1/5 md:h-[calc(100vh-72px)]">
+      <div className="bg-[#83a8dc] sticky top-[72px] z-50 md:w-1/5 md:h-[calc(100vh-72px)]">
         <div className="md:hidden">
           <TemporaryDrawer currentUser={currentUser} />
         </div>

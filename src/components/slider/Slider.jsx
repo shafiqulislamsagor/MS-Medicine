@@ -1,17 +1,25 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
 
-const banner = [
-  {img:"https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",discount:50 , Price:500 , discountsPrice:400},
-  {img:"https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",discount:50 , Price:500 , discountsPrice:400},
-  {img:"https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",discount:50 , Price:500 , discountsPrice:400},
-  {img:"https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",discount:50 , Price:500 , discountsPrice:400},
-];
-
-
-const img = banner.map(imge => imge.img);
 const SliderBanner = () => {
+  const axiosPublic = useAxiosPublic()
+  const { data: dynamic, isLoading, isError } = useQuery({
+    queryKey: ['banner-slider'],
+    queryFn: async () => {
+      const { data } = await axiosPublic.get('/dynamic-banner');
+      return data;
+    }
+  });
+
+  if (isLoading) return <h2>loading</h2>;
+  if (isError) return <h2>error</h2>;
+  
+  // Map over dynamic directly to extract img values
+  const img = dynamic.map((item) => item.img);
+  
   const settings = {
     dots: true,
     dotsClass: "slick-dots slick-thumb",
@@ -31,25 +39,31 @@ const SliderBanner = () => {
       );
     },
   };
-
   return (
     <div>
-      <div className="max-w-screen-xl my-5 lg:my-10">
+      <div className="max-w-screen-xl my-5 lg:my-10  rounded-lg">
         <Slider {...settings}>
-          {banner.map((product, index) => (
-            <div key={index} className="relative">
-              <div className="lg:w-5/6 mx-auto h-80 lg:h-96">
+          {dynamic.map((product, index) => (
+            <div key={index} className="relative  rounded-lg">
+              <div className="lg:w-5/6 mx-auto h-80 lg:h-96  rounded-lg">
                 <img
-                  className="w-full mx-auto h-full"
-                  src={product.img}
+                  className="w-full mx-auto h-full  rounded-lg"
+                  src={product?.img}
                   alt={`Slide ${index + 1}`}
                 />
                 <div className="absolute z-50 top-0 bg-black bg-opacity-30 lg:w-5/6 mx-auto h-80 lg:h-96">
-        <h2 className="text-5xl font-bold text-center mt-24">{product.discount}% Discount</h2>
-                  <div className="flex gap-3 justify-center">
-                    <h2>{product.Price} TK</h2>
-                    <h3>{product.discountsPrice} TK</h3>
+                  <h2 className="text-5xl font-bold text-center mt-24 text-white">
+                    <span className="text-6xl text-yellow-400">
+                      {product?.discount}%
+                    </span>{" "}
+                    Discount
+                  </h2>
+                  <div className="flex gap-3 justify-center items-center text-white mt-5">
+                    <h2 className="text-sm line-through">{product?.price} TK</h2>
+                    <h3 className="text-xl">{parseInt(product?.price - (product?.price * (product?.discount / 100)))} TK</h3>
+
                   </div>
+                  <h2 className="text-center text-white text-3xl font-bold my-9">{product?.name}</h2>
                 </div>
               </div>
             </div>
