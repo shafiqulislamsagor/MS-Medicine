@@ -80,6 +80,7 @@ const SellerManageMadicine = () => {
       company,
       unit,
       status,
+      discountPrice:parseInt(price - price * (discount / 100)),
       img,
       price,
       ad: "Unavailable",
@@ -188,7 +189,7 @@ const SellerManageMadicine = () => {
                         className="w-full"
                       >
                         {
-                          category.map(categorys => <MenuItem key={categorys?._id} value={`${categorys?.name}`}>{categorys?.name}</MenuItem>)
+                          category?.map(categorys => <MenuItem key={categorys?._id} value={`${categorys?.name}`}>{categorys?.name}</MenuItem>)
                         }
                       </Select>
                     </div>

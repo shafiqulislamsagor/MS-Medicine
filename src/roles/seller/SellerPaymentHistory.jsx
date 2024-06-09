@@ -15,32 +15,31 @@ const SellerPaymentHistory = () => {
       const { data } = await axiosSecure.get(
         `/payment-see-seller/${user.email}`
       );
-      console.log(data);
+      // console.log(data);
       return data;
     },
   });
   if (isLoading) return <h3>Loading </h3>;
   if (isError) return <h3>Error </h3>;
-  const status = sellerProduct.map(status => status.status)
+  // const status = sellerProduct.map(status => status.status)
 //   console.log(status)
   const sellerProductView = sellerProduct
     .filter((seller) =>
-      seller.product.some((product) => product.seller.email === user.email)
+      seller.product.some((product) => product.seller.email === user.email) && seller.status === 'paid'
     )
     .map((seller) => seller.product)
     .flat();
-//   console.log(products);
-  const firstProductBuyerName = sellerProduct.map((buyer) => buyer.buyer);
-//   console.log(firstProductBuyerName);
+// console.log(sellerProduct)
 
-  const newProduct = sellerProductView.map((product, index) => ({
-    ...product,
-    buyer: firstProductBuyerName[index],
-    status: status[index]
-  }));
+const sellerProductViewPending = sellerProduct
+    .filter((seller) =>
+      seller.product.some((product) => product.seller.email === user.email) && seller.status === 'pending'
+    )
+    .map((seller) => seller.product)
+    .flat();
 
 
-//   console.log(newProduct)
+console.log(sellerProductView)
 
   return (
     <div className="md:w-[85%] mx-auto my-11">
@@ -67,7 +66,7 @@ const SellerPaymentHistory = () => {
             </tr>
           </thead>
           <tbody>
-            {newProduct.map((p , count) => (
+            {sellerProductView.map((p , count) => (
               <tr key={p._id} className="bg-white border-b ">
                 <td className="w-4 p-4">
                 {count + 1}
@@ -79,8 +78,50 @@ const SellerPaymentHistory = () => {
                   {p?.name}
                 </th>
                 <td className="px-6 py-4">{p?.buyer?.name}</td>
-                <td className="px-6 py-4">{p?.status}</td>
-                <td className="px-6 py-4">{p?.price}</td>
+                <td className="px-6 py-4 font-bold text-gray-600">paid</td>
+                <td className="px-6 py-4">{parseInt(p?.price - p?.price * (p?.discount / 100))}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
+            <tr>
+              <th scope="col" className="p-4">
+                Product Count
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Product Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Buyer Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+              Price
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sellerProductViewPending.map((p , count) => (
+              <tr key={p._id} className="bg-white border-b ">
+                <td className="w-4 p-4">
+                {count + 1}
+                </td>
+                <th
+                  scope="row"
+                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap "
+                >
+                  {p?.name}
+                </th>
+                <td className="px-6 py-4">{p?.buyer?.name}</td>
+                <td className="px-6 py-4 font-bold text-gray-600">pending</td>
+                <td className="px-6 py-4">{parseInt(p?.price - p?.price * (p?.discount / 100))}</td>
               </tr>
             ))}
           </tbody>

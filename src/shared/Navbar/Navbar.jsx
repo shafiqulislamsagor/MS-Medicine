@@ -16,7 +16,7 @@ const Navbar = () => {
   const {data:buyProducts , isError , isLoading , refetch } = useQuery({
     queryKey:['buy'],
     queryFn: async () => {
-      const response = await axiosPublic.get('/buy-products')
+      const response = await axiosPublic.get(`/buy-products/${user.email}`)
       return response.data
     }
   })

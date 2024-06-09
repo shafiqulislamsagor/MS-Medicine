@@ -13,9 +13,9 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
 
 const CardComponents = ({ item, setCardRender }) => {
-  const { setRender } = useAuth();
+  const { setRender , user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { _id, discount, price, img, company, name } = item;
+  const { _id, discount, discountPrice , price, img, company, name , seller } = item;
   // const {
   //   _id,
   //   discount,
@@ -31,7 +31,7 @@ const CardComponents = ({ item, setCardRender }) => {
   //   name,
   // } = item;
 
-  const discountAmount = parseInt(price * (discount / 100));
+  // const discountAmount = parseInt(price * (discount / 100));
 
   const {
     data: currentProductData,
@@ -41,7 +41,7 @@ const CardComponents = ({ item, setCardRender }) => {
   } = useQuery({
     queryKey: ["checkQuantity"],
     queryFn: async () => {
-      const { data } = await axiosSecure.get("/buy-products");
+      const { data } = await axiosSecure.get(`/buy-products/${user.email}`);
       return data;
     },
   });
@@ -76,6 +76,8 @@ const CardComponents = ({ item, setCardRender }) => {
     (produc) => produc.productId == _id
   );
 
+  console.log(item)
+
   return (
     <div className="relative">
       <span className="absolute right-5 buttonStyle px-2 bg-blue-200 rounded-full">
@@ -85,11 +87,11 @@ const CardComponents = ({ item, setCardRender }) => {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {name.charAt(0)}
+              <img src={seller?.photoURL} alt="" /> 
             </Avatar>
           }
-          title={name}
-          subheader={company}
+          title={`Seller: ${seller?.displayName}`}
+          subheader={seller?.email}
         />
         <CardMedia sx={{ height: 140 }} image={img} title={name} />
         <CardContent className="space-y-2">
@@ -104,11 +106,11 @@ const CardComponents = ({ item, setCardRender }) => {
             <span className="line-through text-xs">
               ${price * checkedProduct.length}
             </span>{" "}
-            ${price * checkedProduct.length - discountAmount * checkedProduct.length}
+            ${discountPrice * checkedProduct.length}
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
             <span className="font-bold">Discount:</span> $
-            {discountAmount * checkedProduct.length}({discount}%)
+            {price * checkedProduct.length - discountPrice * checkedProduct.length}({discount}%)
           </Typography>
           <Typography variant="body2" color="textPrimary" component="p">
             <span className="font-bold">Par Unit:</span> ${price}

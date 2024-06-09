@@ -9,7 +9,7 @@ import useAuth from "../../hooks/Auth/useAuth";
 
 const Card = () => {
   const [cardRender, setCardRender] = useState(false);
-  const { setRender } = useAuth();
+  const { setRender , user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -20,10 +20,11 @@ const Card = () => {
   } = useQuery({
     queryKey: ["BuyProduct"],
     queryFn: async () => {
-      const response = await axiosSecure.get("/buy-products");
+      const response = await axiosSecure.get(`/buy-products/${user.email}`);
       return response.data;
     },
   });
+  console.log(BuyProduct)
 
   const { data: product } = useQuery({
     queryKey: ["product-check"],
@@ -70,24 +71,19 @@ const Card = () => {
   });
 
   if (filteredProductBuy === undefined) return;
-
+  console.log(BuyProduct)
   const totalSum = BuyProduct.reduce(
     (sum, currentValue) =>
-      sum + parseInt(currentValue.price * (currentValue.discount / 100)),
-    0
-  );
-  const mainPrice = BuyProduct.reduce(
-    (sum, currentValue) => sum + parseInt(currentValue.price),
+      sum + currentValue.discountPrice,
     0
   );
 
-  const grandPrice = mainPrice - totalSum;
 
   return (
     <div className="w-full md:w-5/6 mx-auto my-20">
       <div className="my-5 flex justify-between items-center">
         <Buttons
-          text={`Payment : $ ${grandPrice}`}
+          text={`Payment : $ ${totalSum}`}
           link="checkout"
           style="buttonDefaultStyle"
         />

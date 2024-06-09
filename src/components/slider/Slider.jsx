@@ -23,6 +23,7 @@ const SliderBanner = () => {
   const settings = {
     dots: true,
     dotsClass: "slick-dots slick-thumb",
+    arrows:false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -41,17 +42,17 @@ const SliderBanner = () => {
   };
   return (
     <div>
-      <div className="max-w-screen-xl my-5 lg:my-10  rounded-lg">
+      <div className="w-full my-5 lg:my-10  rounded-lg">
         <Slider {...settings}>
           {dynamic.map((product, index) => (
             <div key={index} className="relative  rounded-lg">
-              <div className="lg:w-5/6 mx-auto h-80 lg:h-96  rounded-lg">
+              <div className="w-full lg:w-5/6 mx-auto h-80 lg:h-96  rounded-lg">
                 <img
                   className="w-full mx-auto h-full  rounded-lg"
                   src={product?.img}
                   alt={`Slide ${index + 1}`}
                 />
-                <div className="absolute z-50 top-0 bg-black bg-opacity-30 lg:w-5/6 mx-auto h-80 lg:h-96">
+                <div className="absolute z-50 top-0 bg-black bg-opacity-30 w-full lg:w-5/6 mx-auto h-80 lg:h-96">
                   <h2 className="text-5xl font-bold text-center mt-24 text-white">
                     <span className="text-6xl text-yellow-400">
                       {product?.discount}%

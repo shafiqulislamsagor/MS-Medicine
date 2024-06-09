@@ -42,9 +42,10 @@ const Invoice = () => {
   if (isLoading) return <h2>loading</h2>;
   if (isError) return <h2>error</h2>;
 
-  console.log(Invoice[0]);
-  const {product ,status ,date , transactionId , price , email , paymentUser , discount} = Invoice[0]
-  console.log(product , status , date , transactionId ,price , email , paymentUser , discount)
+  // console.log(Invoice[0]);
+  // console.log(Invoice[0].buyer.name)
+  const {product ,status ,date ,buyer , transactionId , price  , discount} = Invoice[0]
+  console.log(product , status , date , transactionId ,price ,  discount)
   return (
     <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
       <div className="sm:w-11/12 lg:w-3/4 mx-auto">
@@ -83,7 +84,7 @@ const Invoice = () => {
             <div>
               <h3 className="text-lg font-semibold text-gray-800">Bill to:</h3>
               <h3 className="text-lg font-semibold text-gray-800">
-                {paymentUser}
+                {buyer.name}
               </h3>
             </div>
             <div className="sm:text-end space-y-2">
@@ -122,7 +123,7 @@ const Invoice = () => {
                   <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
                     Item
                   </h5>
-                  <p className="font-medium text-gray-800">{email}</p>
+                  <p className="font-medium text-gray-800">{buyer.email}</p>
                 </div>
                 <div>
                   <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">

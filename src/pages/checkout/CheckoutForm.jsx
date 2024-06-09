@@ -13,7 +13,7 @@ const CheckoutForm = ({ paymentCheck, total, discountAmount }) => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(paymentCheck)
+  // console.log(paymentCheck)
 
   useEffect(() => {
     if (total > 0) {

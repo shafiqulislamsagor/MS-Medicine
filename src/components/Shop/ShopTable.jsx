@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const ShopTable = () => {
   const [current, setcurrent] = useState(1)
   const [count, setcount] = useState(0)
-  const { setRender } = useAuth();
+  const { setRender , user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const parpage = 5
@@ -27,7 +27,7 @@ const ShopTable = () => {
       return response.data;
     },
   });
-
+// console.log(products)
   const selectHandle = (event, id) => {
     const selected = event.target.checked;
     // console.log(selected);
@@ -42,6 +42,7 @@ const ShopTable = () => {
       status,
       unit,
       company,
+      discountPrice,
       category,
       description,
       generic,
@@ -52,6 +53,7 @@ const ShopTable = () => {
       discount,
       price,
       img,
+      discountPrice,
       status,
       unit,
       company,
@@ -60,12 +62,13 @@ const ShopTable = () => {
       generic,
       name,
       seller,
-      productId:_id
+      productId:_id,
+      buyer:{name:user.displayName,email:user.email,img:user.photoURL}
     };
 
     if (selected) {
       try {
-        axiosSecure.post("buy-products", buyProductInfo).then(() => {
+        axiosSecure.post("/buy-products", buyProductInfo).then(() => {
           toast.success("Product selected");
           setRender(true);
           refetch();

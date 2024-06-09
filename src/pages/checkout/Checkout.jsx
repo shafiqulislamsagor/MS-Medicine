@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
+import useAuth from "../../hooks/Auth/useAuth";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const Checkout = () => {
   const axiosSecure = useAxiosSecure();
+  const {user} = useAuth()
 
   const {
     data: paymentCheck,
@@ -16,23 +18,24 @@ const Checkout = () => {
   } = useQuery({
     queryKey: ["paymentcheck"],
     queryFn: async () => {
-      const { data } = await axiosSecure.get("/buy-products");
+      const { data } = await axiosSecure.get(`/buy-products/${user.email}`);
       return data;
     },
   });
 
   if (isError) return <h2>Error</h2>;
   if (isLoading) return <h2>Loading...</h2>;
+  console.log(paymentCheck)
 
   const totalGrantedPrice = paymentCheck.reduce(
-    (sum, product) => sum + parseInt(product.price * (product.discount / 100)),
+    (sum, product) => sum + product.discountPrice,
     0
   );
 
-  const totalSum = paymentCheck.reduce((sum, currentValue) => sum + parseInt(currentValue.price * (currentValue.discount / 100)), 0);
+
 const mainPrice = paymentCheck.reduce((sum, currentValue) => sum + parseInt(currentValue.price), 0);
 
-const grandPrice = mainPrice - totalSum
+const grandPrice = mainPrice - totalGrantedPrice
   // console.log(totalGrantedPrice);
 
   return (
@@ -56,7 +59,7 @@ const grandPrice = mainPrice - totalSum
                   Savings
                 </dt>
                 <dd className="text-base font-medium text-green-500">
-                  -${totalGrantedPrice}
+                  -${grandPrice}
                 </dd>
               </dl>
 
@@ -64,7 +67,7 @@ const grandPrice = mainPrice - totalSum
 
             <dl className="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 ">
               <dt className="text-base font-bold text-gray-900 ">Grand Price</dt>
-              <dd className="text-base font-bold text-gray-900 ">${grandPrice}</dd>
+              <dd className="text-base font-bold text-gray-900 ">${totalGrantedPrice}</dd>
             </dl>
           </div>
         </div>
@@ -73,8 +76,8 @@ const grandPrice = mainPrice - totalSum
             <Elements stripe={stripePromise}>
               <CheckoutForm
                 paymentCheck={paymentCheck}
-                total={grandPrice}
-                discountAmount={totalSum}
+                total={totalGrantedPrice}
+                discountAmount={grandPrice}
               />
             </Elements>
           </div>
