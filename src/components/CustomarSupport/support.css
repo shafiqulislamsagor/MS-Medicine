@@ -1,0 +1,7 @@
+.bgImage{
+    background: url('../../assets/bg-support.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 412px;
+}

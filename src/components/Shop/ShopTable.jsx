@@ -60,6 +60,7 @@ const ShopTable = () => {
       category,
       description,
       generic,
+      date:new Date(),
       name,
       seller,
       productId:_id,

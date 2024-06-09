@@ -31,12 +31,7 @@ const SellerPaymentHistory = () => {
     .flat();
 // console.log(sellerProduct)
 
-const sellerProductViewPending = sellerProduct
-    .filter((seller) =>
-      seller.product.some((product) => product.seller.email === user.email) && seller.status === 'pending'
-    )
-    .map((seller) => seller.product)
-    .flat();
+const sellerProductViewPending = sellerProduct.filter((seller) => seller.product.some((product) => product.seller.email === user.email) && seller.status === 'pending').map((seller) => seller.product).flat();
 
 
 console.log(sellerProductView)
