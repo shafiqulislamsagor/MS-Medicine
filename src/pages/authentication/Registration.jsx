@@ -73,7 +73,7 @@ const Registration = () => {
   };
   return (
     <>
-      <div className="pt-10 w-2/4 mx-auto">
+      <div className="pt-10 w-[95%] md:w-2/3 lg:w-2/4 mx-auto">
         <Buttons
           text="Back"
           link=""

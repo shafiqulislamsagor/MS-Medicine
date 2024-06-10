@@ -11,6 +11,8 @@ import { red } from "@mui/material/colors";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const CardComponents = ({ item, setCardRender }) => {
   const { setRender , user } = useAuth();
@@ -69,14 +71,14 @@ const CardComponents = ({ item, setCardRender }) => {
     setRender(true);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading products</div>;
+  if (isLoading) return <LoaderLine/>
+  if (error) return <ErrorPage/>
 
   const checkedProduct = currentProductData.filter(
     (produc) => produc.productId == _id
   );
 
-  console.log(item)
+  // console.log(item)
 
   return (
     <div className="relative">

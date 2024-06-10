@@ -7,6 +7,8 @@ import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import UserMenu from "./user/UserMenu";
 import SellerMenu from "./seller/SellerMenu";
 import TemporaryDrawer from "../../components/dawyer/Dawyar";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../Error/Error";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -21,8 +23,8 @@ const Dashboard = () => {
     },
   });
 
-  if (isLoading) return <h1>loading...</h1>;
-  if (isError) return <h1>error</h1>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
 
   const currentUser = data.find(
     (currentUser) => currentUser?.email === user?.email
@@ -32,7 +34,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="bg-[#83a8dc] sticky top-[72px] z-50 md:w-1/5 md:h-[calc(100vh-72px)]">
+      <div className="bg-[#83a8dc] sticky top-[72px] z-30 md:w-1/5 md:h-[calc(100vh-72px)]">
         <div className="md:hidden">
           <TemporaryDrawer currentUser={currentUser} />
         </div>

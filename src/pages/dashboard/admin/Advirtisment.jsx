@@ -3,6 +3,8 @@ import useAxiosSecure from "../../../hooks/AxiosSecure/useAxiosSecure";
 import Toggle from 'react-toggle'
 import "react-toggle/style.css" 
 import { toast } from "react-toastify";
+import LoaderLine from "../../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../Error/Error";
 
 const Advirtisment = () => {
   const axiosSecure = useAxiosSecure();
@@ -32,8 +34,8 @@ const Advirtisment = () => {
     },
   })
 
-  if (isLoading) return <h3>Loading...</h3>;
-  if (isError) return <h2>error.....</h2>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   const adHandler = (id , event) =>{
     const toogleValue = event.target.checked;
     toogleChange({id , toogleValue})

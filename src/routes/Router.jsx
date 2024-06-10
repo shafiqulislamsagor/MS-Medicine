@@ -18,32 +18,41 @@ import Invoide from "../pages/invoide/Invoide";
 import SellerPaymentHistory from "../roles/seller/SellerPaymentHistory";
 import SellerAsk from "../roles/seller/SellerAsk";
 import DetailsCategory from "../pages/DetailsCategory/DetailsCategory";
+import PaymentInfo from "../roles/user/PaymentInfo";
+import PrivetRoutes from "../privetRoutes/PrivetRoutes";
+import ErrorPage from "../pages/Error/Error";
+import UpdateProfile from "../components/UpdateProfile/UpdateProfile";
 
 
 export const router = createBrowserRouter([
     {
       path: "/",
       element: <MainPage/>,
+      errorElement:<ErrorPage/>,
       children: [
         {
           path: "/",
           element: <Home/>
         },
         {
+          path:"/update-profile",
+          element:<UpdateProfile/>
+        },
+        {
           path:'/shop',
-          element:<Shop/>
+          element:<PrivetRoutes><Shop/></PrivetRoutes>
         },
         {
           path:'/card',
-          element:<Card/>
+          element:<PrivetRoutes><Card/></PrivetRoutes>
         },
         {
           path:'/category-details/:category',
-          element:<DetailsCategory/>
+          element:<PrivetRoutes><DetailsCategory/></PrivetRoutes>
         },
         {
           path:'/dashboard',
-          element:<Dashboard/> ,
+          element:<PrivetRoutes><Dashboard/></PrivetRoutes> ,
           children:[
             {
               path:'',
@@ -80,6 +89,10 @@ export const router = createBrowserRouter([
             {
               path:'seller-advirties',
               element:<SellerAsk/>
+            },
+            {
+              path:'user-paymentInfo',
+              element:<PaymentInfo/>
             }
           ]
         }
@@ -87,6 +100,6 @@ export const router = createBrowserRouter([
     },
     {path:'/join-us',element: <Login/>},
     {path:'/registration',element: <Registration/>},
-    {path:'/checkout',element: <Checkout/>},
-    {path:'/invoide/:id',element: <Invoide/>},
+    {path:'/checkout',element: <PrivetRoutes><Checkout/></PrivetRoutes>},
+    {path:'/invoide/:id',element:<PrivetRoutes> <Invoide/></PrivetRoutes>},
   ]);

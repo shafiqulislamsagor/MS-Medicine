@@ -2,6 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/Auth/useAuth";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import { toast } from "react-toastify";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const SellerAsk = () => {
   const { user } = useAuth();
@@ -33,8 +35,8 @@ const SellerAsk = () => {
       toast.error("Ad request failed");
     },
   });
-  if (isLoading) return <h2>loading</h2>;
-  if (isError) return <h2>error</h2>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   const requestHandle = (id) =>{
     const ad = 'requested'
     addrequest({id , ad})

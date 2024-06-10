@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import useAuth from "../../hooks/Auth/useAuth";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const SellerPaymentHistory = () => {
   const axiosSecure = useAxiosSecure();
@@ -19,8 +21,8 @@ const SellerPaymentHistory = () => {
       return data;
     },
   });
-  if (isLoading) return <h3>Loading </h3>;
-  if (isError) return <h3>Error </h3>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   // const status = sellerProduct.map(status => status.status)
 //   console.log(status)
   const sellerProductView = sellerProduct

@@ -2,6 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hooks/AxiosPublic/useAxiosPublic";
 import { toast } from "react-toastify";
 import useAuth from "../../../hooks/Auth/useAuth";
+import LoaderLine from "../../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../Error/Error";
 
 const AdminManageUser = () => {
   const axiosSecure = useAxiosPublic();
@@ -59,8 +61,8 @@ const AdminManageUser = () => {
     blocked({ id, status });
   };
 
-  if (error) return <h2>Error</h2>;
-  if (isLoading) return <h2>Loading.....</h2>;
+  if (error) return <ErrorPage/>
+  if (isLoading) return <LoaderLine/>
   if (!users || users.length === 0) return <h2>No users found</h2>;
 
   const disabledHandler = users.find(current => current?.email === user?.email)

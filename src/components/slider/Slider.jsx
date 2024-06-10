@@ -3,6 +3,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const SliderBanner = () => {
   const axiosPublic = useAxiosPublic()
@@ -14,8 +16,8 @@ const SliderBanner = () => {
     }
   });
 
-  if (isLoading) return <h2>loading</h2>;
-  if (isError) return <h2>error</h2>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   
   // Map over dynamic directly to extract img values
   const img = dynamic.map((item) => item.img);

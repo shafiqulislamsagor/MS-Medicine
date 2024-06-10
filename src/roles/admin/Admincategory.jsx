@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import useImageUpload from "../../hooks/uploadImage/useImage";
 import AdminCategory from "../../components/adminCategory/AdminCategory";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const style = {
   position: "absolute",
@@ -67,8 +69,8 @@ const Admincategory = () => {
 
     formCall();
   };
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   
   return (
     <div>

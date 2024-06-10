@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
 import Modal from "../modal/Modal";
 import { useEffect, useState } from "react";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const ShopTable = () => {
   const [current, setcurrent] = useState(1)
@@ -88,8 +90,8 @@ const ShopTable = () => {
     loaded()
   }, [count])
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   // console.log(products);
   const buttonClick = (value) => {
 

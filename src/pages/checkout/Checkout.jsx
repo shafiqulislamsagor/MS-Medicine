@@ -4,6 +4,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import useAuth from "../../hooks/Auth/useAuth";
+import ErrorPage from "../Error/Error";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -23,9 +25,8 @@ const Checkout = () => {
     },
   });
 
-  if (isError) return <h2>Error</h2>;
-  if (isLoading) return <h2>Loading...</h2>;
-  console.log(paymentCheck)
+  if (isError) return <ErrorPage/>
+  if (isLoading) return <LoaderLine/>
 
   const totalGrantedPrice = paymentCheck.reduce(
     (sum, product) => sum + product.discountPrice,

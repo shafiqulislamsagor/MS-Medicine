@@ -3,6 +3,9 @@ import SellerHome from "../../../roles/seller/SellerHome";
 import useAxiosSecure from "../../../hooks/AxiosSecure/useAxiosSecure";
 import useAuth from "../../../hooks/Auth/useAuth";
 import AdminDash from "../../../roles/admin/AdminHome";
+import UserHome from "../../../roles/user/UserHome";
+import ErrorPage from "../../Error/Error";
+import LoaderLine from "../../../components/LineLoading/LoaderLine";
 
 const AdminHome = () => {
     const { user } = useAuth();
@@ -17,8 +20,8 @@ const AdminHome = () => {
       },
     });
   
-    if (isLoading) return <h1>loading...</h1>;
-    if (isError) return <h1>error</h1>;
+    if (isLoading) return <LoaderLine/>
+    if (isError) return <ErrorPage/>
   
     const currentUser = data.find(
       (currentUser) => currentUser?.email === user?.email
@@ -28,7 +31,7 @@ const AdminHome = () => {
         <div className="">
           {currentUser?.userRole === "admin" && <AdminDash />}
           {currentUser?.userRole === "seller" && <SellerHome />}
-          {/* {currentUser?.userRole === "user" && <UserMenu />} */}
+          {currentUser?.userRole === "user" && <UserHome/>}
         </div>
     );
 };

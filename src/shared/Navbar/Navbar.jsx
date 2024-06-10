@@ -4,23 +4,26 @@ import { NavLink } from "react-router-dom";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { SiShopee } from "react-icons/si";
 import Buttons from "../../components/Button/Buttons";
-import useAuth from './../../hooks/Auth/useAuth';
+import useAuth from "./../../hooks/Auth/useAuth";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
-
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 
 const Navbar = () => {
-  const {user , UserLogout ,render ,setRender } = useAuth()
-  const axiosPublic = useAxiosPublic()
-  const {data:buyProducts , isError , isLoading , refetch } = useQuery({
-    queryKey:['buy'],
+  const { user, UserLogout, render, setRender } = useAuth();
+  const axiosPublic = useAxiosSecure();
+  const {
+    data: buyProducts,
+    refetch
+  } = useQuery({
+    queryKey: ["navbar"],
     queryFn: async () => {
-      const response = await axiosPublic.get(`/buy-products/${user.email}`)
-      return response.data
-    }
-  })
-console.log('navbar')
+      const response = await axiosPublic.get(`/buy-products/${user.email}`);
+      return response.data;
+    },
+  });
+  // console.log(buyProducts)
+  // console.log('navbar')
   // console.log(render)
   // console.log(user)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,65 +31,80 @@ console.log('navbar')
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const logoutHandler = () =>{
+  const logoutHandler = () => {
     UserLogout()
-    .then(()=>{
-      toast.success('Logout Success...!')
-    })
-    .catch(()=>{
-      toast.error('Logout Failed...!')
-    })
-  }
+      .then(() => {
+        toast.success("Logout Success...!");
+      })
+      .catch(() => {
+        toast.error("Logout Failed...!");
+      });
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
 
+  dropdownOpen &&
+    setTimeout(function () {
+      setDropdownOpen(false);
+    }, 4000);
+  navbarOpen &&
+    setTimeout(function () {
+      setNavbarOpen(false);
+    }, 4000);
+
   const menu = (
     <>
       <li>
         <NavLink
-          to={'/'}
-          className={({ isActive }) => !isActive ? 'flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
+          to={"/"}
+          className={({ isActive }) =>
+            !isActive
+              ? "flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
+              : "flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase"
+          }
           aria-current="page"
         >
           Home
         </NavLink>
       </li>
       <li>
-        <NavLink 
-        to={'/shop'}
-        className={({ isActive }) => !isActive ? 'flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase' :'flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'}
+        <NavLink
+          to={"/shop"}
+          className={({ isActive }) =>
+            !isActive
+              ? "flex py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
+              : "flex py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase"
+          }
         >
           Shop
         </NavLink>
       </li>
-      <li>
+      {user && <li>
         <NavLink
-  to={'/card'}
-  className={({ isActive }) =>
-    !isActive
-      ? 'flex gap-2 relative py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase'
-      : 'flex gap-2 relative py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase'
-  }
->
-  <SiShopee className="text-xl" /> card
-  <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:left-[70px] price-color">
-      {buyProducts?.length}
-    </span>
-</NavLink>
-
-      </li>
+          to={"/card"}
+          className={({ isActive }) =>
+            !isActive
+              ? "flex gap-2 relative py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 uppercase"
+              : "flex gap-2 relative py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 uppercase"
+          }
+        >
+          <SiShopee className="text-xl" /> card
+          <span className="text-sm absolute -top-0 md:-top-2 left-[85px] md:left-[70px] price-color">
+            {buyProducts?.length}
+          </span>
+        </NavLink>
+      </li> }
     </>
   );
-  if(isLoading) return null
-  if(isError) return null
-  if(render) {
-    refetch()
-    setRender(false)
+  if (render) {
+    refetch();
+    setRender(false);
   }
-  return(
+  // console.log('navbar')
+  return (
     <>
       <nav className="bg-blue-100 border-gray-200 sticky top-0 z-50 ">
         <div className="max-w-screen-xl flex  items-center justify-between mx-auto py-4 md:p-4">
@@ -102,7 +120,7 @@ console.log('navbar')
           <div className="flex relative gap-0 md:gap-3 items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <div>
               <Button
-              className="buttonDefaultStyle"
+                className="buttonDefaultStyle !hidden md:!block"
                 id="demo-positioned-button"
                 aria-controls={open ? "demo-positioned-menu" : undefined}
                 aria-haspopup="true"
@@ -130,21 +148,24 @@ console.log('navbar')
                 <MenuItem onClick={handleClose}>English</MenuItem>
               </Menu>
             </div>
-            {!user ? <Buttons text='join us' link='join-us' style='buttonStyle' /> :
-            <button
-              type="button"
-              className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
-              id="user-menu-button"
-              aria-expanded={dropdownOpen}
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-            >
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                src={user?.photoURL}
-                alt="user photo"
-              />
-            </button>}
+            {!user ? (
+              <Buttons text="join us" link="join-us" style="buttonStyle !text-xs md:!text-base" />
+            ) : (
+              <button
+                type="button"
+                className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
+                id="user-menu-button"
+                aria-expanded={dropdownOpen}
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <span className="sr-only">Open user menu</span>
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src={user?.photoURL}
+                  alt="user photo"
+                />
+              </button>
+            )}
             {dropdownOpen && (
               <div
                 className="z-50 absolute top-7 right-0 my-4 text-base list-none bg-blue-200 divide-y divide-gray-100 rounded-lg shadow "
@@ -161,24 +182,24 @@ console.log('navbar')
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
                     <NavLink
-                      to='/dashboard'
+                      to="/dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
                     >
                       Dashboard
                     </NavLink>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <NavLink
+                      to={'/update-profile'}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
                     >
                       Update Profile
-                    </a>
+                    </NavLink>
                   </li>
                   <li>
                     <span
                       onClick={logoutHandler}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
+                      className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
                     >
                       Log out
                     </span>
@@ -214,7 +235,7 @@ console.log('navbar')
           </div>
           <div
             className={`items-center justify-between ${
-              navbarOpen ? "absolute top-10 z-40 w-1/2 right-0" : "hidden"
+              navbarOpen ? "absolute top-10 z-50 w-1/2 right-0" : "hidden"
             } w-full md:flex md:w-auto md:order-1`}
             id="navbar-user"
           >

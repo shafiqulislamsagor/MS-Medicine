@@ -15,6 +15,8 @@ import FormLabel from "@mui/material/FormLabel";
 import { toast } from "react-toastify";
 import useImageUpload from "../../../hooks/uploadImage/useImage";
 import useAuth from "../../../hooks/Auth/useAuth";
+import LoaderLine from "../../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../Error/Error";
 
 const style = {
   position: "absolute",
@@ -104,8 +106,8 @@ const SellerManageMadicine = () => {
     formCall();
   };
 
-  if (isLoading) return <h2>Loading...</h2>;
-  if (isError) return <p>Error</p>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   console.log(productData);
   return (
     <div>

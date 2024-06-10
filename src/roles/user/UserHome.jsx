@@ -1,23 +1,21 @@
-import CountUp from "react-countup";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
+import CountUp from "react-countup";
 import useAuth from "../../hooks/Auth/useAuth";
 import LoaderLine from "../../components/LineLoading/LoaderLine";
 import ErrorPage from "../../pages/Error/Error";
 
-const SellerHome = () => {
+const UserHome = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const {user} = useAuth()
   const {
     data: sellerProduct,
     isError,
     isLoading,
   } = useQuery({
-    queryKey: ["seller-home"],
+    queryKey: ["user-home"],
     queryFn: async () => {
-      const { data } = await axiosSecure.get(
-        `/payment-see-seller/${user.email}`
-      );
+      const { data } = await axiosSecure.get(`/payments-user-product/${user.email}`);
       return data;
     },
   });
@@ -25,15 +23,18 @@ const SellerHome = () => {
   if (isError) return <ErrorPage/>
   //   console.log(status)
 
-  const panding = sellerProduct.filter(pro => pro.status === 'pending')
-  const paid = sellerProduct.filter(pro => pro.status === 'paid')
-
-  console.log(panding)
-
-const pandingPrice = panding.reduce((sum, currentValue) => sum + parseInt(currentValue.price), 0);
-const paidPrice = paid.reduce((sum, currentValue) => sum + parseInt(currentValue.price), 0);
+  const panding = sellerProduct.filter((pro) => pro.status === "pending");
+  const paid = sellerProduct.filter((pro) => pro.status === "paid");
 
 
+  const pandingPrice = panding.reduce(
+    (sum, currentValue) => sum + parseInt(currentValue.price),
+    0
+  );
+  const paidPrice = paid.reduce(
+    (sum, currentValue) => sum + parseInt(currentValue.price),
+    0
+  );
   return (
     <div className="">
       <div className="flex flex-col md:flex-row justify-center gap-10">
@@ -50,7 +51,7 @@ const paidPrice = paid.reduce((sum, currentValue) => sum + parseInt(currentValue
             Paid Total
           </h5>
           <p className="font-normal text-gray-700 text-xl">
-           $ <CountUp delay={2} end={paidPrice} />
+            $ <CountUp delay={2} end={paidPrice} />
           </p>
         </div>
       </div>
@@ -58,4 +59,4 @@ const paidPrice = paid.reduce((sum, currentValue) => sum + parseInt(currentValue
   );
 };
 
-export default SellerHome;
+export default UserHome;

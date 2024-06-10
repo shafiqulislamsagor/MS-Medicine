@@ -1,4 +1,4 @@
-
+import { toast } from 'react-toastify';
 import { createContext, useEffect, useState } from "react";
 
 // import axios from "axios";
@@ -31,6 +31,28 @@ const ContextApi = ({ children }) => {
             displayName: name, photoURL: photo
         })
     }
+    const updateProfiles = (name) => {
+        setLoading(false);
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+        }).then(() => {
+            setUser(auth.currentUser);
+            setLoading(true);
+        }).catch(() => {
+            toast.error('not changes')
+        });
+    }
+    const updateProfilesPhoto = (photo) => {
+        setLoading(false);
+        return updateProfile(auth.currentUser, {
+            photoURL: photo
+        }).then(() => {
+            setUser(auth.currentUser);
+            setLoading(true);
+        }).catch(() => {
+            toast.error('not changes')
+        });
+    }
 
     const provider = new GoogleAuthProvider();
     const googleLogin = () => {
@@ -58,7 +80,7 @@ const ContextApi = ({ children }) => {
     }, [])
 
 
-    const value = { user, loading,setUser ,render , setRender  , setLoading , UserCreate, UserLogin, UserUpdate, googleLogin , UserLogout }
+    const value = { user, loading,setUser ,render , updateProfilesPhoto ,updateProfiles , setRender  , setLoading , UserCreate, UserLogin, UserUpdate, googleLogin , UserLogout }
     return (
         <ContextAll.Provider value={value}>{children}</ContextAll.Provider>
     );

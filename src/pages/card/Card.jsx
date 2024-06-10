@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../Error/Error";
 
 const Card = () => {
   const [cardRender, setCardRender] = useState(false);
@@ -18,7 +20,7 @@ const Card = () => {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["BuyProduct"],
+    queryKey: ["newCard"],
     queryFn: async () => {
       const response = await axiosSecure.get(`/buy-products/${user.email}`);
       return response.data;
@@ -61,10 +63,12 @@ const Card = () => {
     }
   };
 
+  console.log(user)
+
   if (cardRender) return rerender();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
 
   const filteredProductBuy = product?.filter((item) => {
     return BuyProduct?.some((prodItem) => prodItem?.productId === item?._id);
@@ -77,6 +81,7 @@ const Card = () => {
       sum + currentValue.discountPrice,
     0
   );
+  console.log(totalSum)
 
 
   return (

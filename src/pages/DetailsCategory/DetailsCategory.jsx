@@ -1,17 +1,16 @@
 import { useParams } from "react-router-dom";
-import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import Modal from './../../components/modal/Modal';
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../Error/Error";
 
 const DetailsCategory = () => {
   const { category } = useParams();
-  const { setRender } = useAuth();
+  const { setRender , user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  // console.log(category);
-  const axiosPublic = useAxiosPublic();
   const {
     data: categoryProducts,
     isError,
@@ -20,7 +19,7 @@ const DetailsCategory = () => {
   } = useQuery({
     queryKey: ["category-details"],
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/category-all/${category}`);
+      const { data } = await axiosSecure.get(`/category-all/${category}`);
       return data;
     },
   });
@@ -57,7 +56,8 @@ const DetailsCategory = () => {
       generic,
       name,
       seller,
-      productId:_id
+      productId:_id,
+      buyer:{name:user.displayName,email:user.email,img:user.photoURL}
     };
 
     if (selected) {
@@ -73,8 +73,8 @@ const DetailsCategory = () => {
       console.log(currentProduct);
     }
   };
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
 
   console.log(categoryProducts);
   if (categoryProducts.length < 1)

@@ -2,6 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import { BsClipboard2CheckFill } from "react-icons/bs";
 import { toast } from 'react-toastify';
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const PaymentManageTable = () => {
   const axiosSecure = useAxiosSecure();
@@ -37,8 +39,8 @@ const PaymentManageTable = () => {
     },
   });
 
-  if (isLoading) return <h3>Loading </h3>;
-  if (isError) return <h3>Error </h3>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   const status = sellerProduct.map(status => status.status)
 //   console.log(status)
   

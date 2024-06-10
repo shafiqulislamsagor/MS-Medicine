@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
 import CategoryCard from "./CategoryCard";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 
 const Category = () => {
@@ -12,8 +14,8 @@ const Category = () => {
             return data
         }
     })
-    if(isLoading) return <h2>loading</h2>
-    if(isError) return <h2>error</h2>
+    if(isLoading) return <LoaderLine/>
+    if(isError) return <ErrorPage/>
   return (
     <div className="w-[95%] md:w-5/6 mx-auto my-20">
       <h2 className="text-4xl md:text-5xl price-color font-bold text-center">Category</h2>

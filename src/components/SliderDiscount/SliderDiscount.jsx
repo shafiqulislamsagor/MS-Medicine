@@ -10,10 +10,12 @@ import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/Auth/useAuth";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const SliderDiscount = () => {
   const axiosPublic = useAxiosPublic();
-  const { setRender } = useAuth();
+  const { user , setRender } = useAuth();
   const axiosSecure = useAxiosSecure();
   const {
     data: discountProduct,
@@ -27,13 +29,14 @@ const SliderDiscount = () => {
       return data;
     },
   });
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   // console.log(discountProduct)
   const discount = discountProduct.filter((data) => data.discount > 0);
   console.log(discount);
   const selectHandle = (id) => {
     console.log(id);
+    if(!user.email) return toast.error('Login then try again')
     const currentProduct = discountProduct.find(
       (findProduct) => findProduct?._id === id
     );
@@ -63,11 +66,13 @@ const SliderDiscount = () => {
       generic,
       name,
       seller,
+      buyer:{name:user.displayName , email:user.email , img:user.photoURL},
       productId: _id,
     };
 
     if (buyProductInfo) {
       try {
+        
         axiosSecure.post("/buy-products", buyProductInfo).then(() => {
           toast.success("add card succesfully");
           setRender(true);
@@ -114,7 +119,7 @@ const SliderDiscount = () => {
           <SwiperSlide key={card?._id}>
             <div className="max-w-sm mx-auto h-[520px] relative rounded overflow-hidden pb-4 shadow-lg">
               <img
-                className="w-full"
+                className="w-[90%] mx-auto h-[280px]"
                 src={card?.img}
                 alt="Sunset in the mountains"
               />

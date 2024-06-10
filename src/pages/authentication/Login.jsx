@@ -8,11 +8,12 @@ import { toast } from "react-toastify";
 import { axiosSecure } from "../../hooks/AxiosSecure/useAxiosSecure";
 
 const Login = () => {
-  const { UserLogin, setLoading, UserLogout, googleLogin } = useAuth();
+  const { UserLogin , setLoading, UserLogout, googleLogin } = useAuth();
   const location = useLocation();
   const returnPath = location?.state || "/";
   const navigate = useNavigate();
   const loginHandler = async (event) => {
+    
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
@@ -23,6 +24,7 @@ const Login = () => {
       return;
     }
     try {
+      setLoading(true)
       const { data } = await axiosSecure.get("/users");
       const user = data.find((user) => user.email === email);
 
@@ -52,7 +54,9 @@ const Login = () => {
   };
 
   const googleHandler = () => {
+    
     googleLogin().then(async (current) => {
+      setLoading(true)
       // console.log(current)
       const { displayName, email, photoURL } = current.user;
       const googleInfo = {
@@ -106,7 +110,7 @@ const Login = () => {
   };
   return (
     <>
-      <div className="pt-10 w-2/4 mx-auto">
+      <div className="pt-10 w-[95%] md:w-2/3 lg:w-2/4 mx-auto">
         <Buttons
           text="Back"
           link=""
@@ -192,7 +196,7 @@ const Login = () => {
                 <input
                   type="submit"
                   value="Log-In"
-                  className="w-full text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[rgb(56,134,233)] border-orange-500 border"
+                  className="w-full cursor-pointer text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[rgb(56,134,233)] border-orange-500 border"
                 />
 
                 {/* Registration Link */}

@@ -6,6 +6,8 @@ import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import { useParams } from "react-router-dom";
 import Buttons from "./../../components/Button/Buttons";
 import dateFormat from "dateformat";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../Error/Error";
 const Invoice = () => {
   const [pdfCreated, setPdfCreated] = useState(false);
   const { id } = useParams();
@@ -39,8 +41,8 @@ const Invoice = () => {
     setPdfCreated(false);
   };
 
-  if (isLoading) return <h2>loading</h2>;
-  if (isError) return <h2>error</h2>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
 
   // console.log(Invoice[0]);
   // console.log(Invoice[0].buyer.name)

@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/AxiosSecure/useAxiosSecure";
 import { format } from 'date-fns';
+import LoaderLine from "../../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../Error/Error";
 
 const Report = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,8 +17,8 @@ const Report = () => {
       return data;
     },
   });
-  if (isLoading) return <h2>Loading</h2>;
-  if (isError) return <h2>Error</h2>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
 
   const sellerProductViewAll = newProduct.map(seller => seller.product).flat();
 

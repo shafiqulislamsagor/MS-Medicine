@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import useAxiosPublic from "../../hooks/AxiosPublic/useAxiosPublic";
+import LoaderLine from "../LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const CategoryCard = ({card}) => {
     const axiosPublic = useAxiosPublic()
@@ -11,8 +13,8 @@ const CategoryCard = ({card}) => {
             return data
         }
     })
-    if(isLoading) return <h1>Loading...</h1>
-    if(isError) return <h2>error</h2>
+    if(isLoading) return <LoaderLine/>
+    if(isError) return <ErrorPage/>
     const productFilter = CardCount.filter(cards => cards.category === card.name)
     return (
         <Link to={`/category-details/${card.name}`} key={card._id} className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow ">

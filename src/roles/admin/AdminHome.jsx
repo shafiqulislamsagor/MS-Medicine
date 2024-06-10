@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
 import CountUp from "react-countup";
+import LoaderLine from "../../components/LineLoading/LoaderLine";
+import ErrorPage from "../../pages/Error/Error";
 
 const AdminDash = () => {
     const axiosSecure = useAxiosSecure();
@@ -17,8 +19,8 @@ const AdminDash = () => {
       return data;
     },
   });
-  if (isLoading) return <h3>Loading </h3>;
-  if (isError) return <h3>Error </h3>;
+  if (isLoading) return <LoaderLine/>
+  if (isError) return <ErrorPage/>
   //   console.log(status)
 
   const panding = sellerProduct.filter(pro => pro.status === 'pending')
